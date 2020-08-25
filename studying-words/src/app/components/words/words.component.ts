@@ -1,3 +1,4 @@
+import { Word } from './../../word.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,34 +8,30 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class WordsComponent implements OnInit {
-  displayCard: boolean;
-  words = ['Who', 'What', 'When', 'Where', 'Why', 'And', 'She', 'He', 'Other', 'About'];
-  word: string;
-  wordIndex: number;
-  loaded: boolean = true;
-
+  readWords = []
+  words: Word[];
+  word: Word = {
+    text: '',
+    correctness: false
+  };
+  
   constructor() { }
 
   ngOnInit() {
-  }
-
-  onLoad() {
-    this.displayCard = true;
-    this.wordIndex = this.randomNumber(1, this.words.length)
-    this.word = this.words[this.wordIndex]
-  }
-
-  onCorrect() {
-
-  }
-
-  onIncorrect() {
-
   }
 
   randomNumber(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  onLoad() {
+  }
+
+  onCorrect(word) {
+  }
+
+  onIncorrect(word) {
   }
 }
