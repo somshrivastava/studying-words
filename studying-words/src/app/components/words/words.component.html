@@ -1,0 +1,12 @@
+<div class="mt-5 container">
+    <button [disabled]=!loaded (click)='onLoad()' class="btn btn-outline-primary btn-lg">Load Word</button>
+    <div *ngIf='displayCard' class="mt-5 p-2 card">
+        <div class="card-body text-center">
+            <h1>{{word}}</h1>
+        </div>
+    </div>
+    <div *ngIf='displayCard' class="mt-5 button-container">
+        <button (click)='onCorrect()' class="btn btn-outline-success btn-lg mr-5">Correct</button>
+        <button (click)='onIncorrect()' class="btn btn-outline-danger btn-lg">Incorrect</button>    
+    </div>
+</div>
