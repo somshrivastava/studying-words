@@ -1,4 +1,4 @@
 export interface Word {
     text: string,
-    correctness: boolean
+    correctness?: boolean
 }
