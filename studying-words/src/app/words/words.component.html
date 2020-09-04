@@ -1,0 +1,10 @@
+<div class="container mt-3">
+    <button (click)='generateWord()' class="mb-3 btn btn-sm btn-block btn-outline-primary">Generate</button>
+    <div *ngIf='usedWords.length > 0' class="card">
+        <div class="card-body">
+            <h3>{{ currentWord['word'] }}</h3>
+            <button (click)='correctWord()' class="btn btn-success mr-3">Correct</button>
+            <button (click)='inCorrectWord()' class="btn btn-danger">Incorrect</button>
+        </div>
+    </div>
+</div>
