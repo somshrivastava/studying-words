@@ -1,18 +1,30 @@
+import { AppRoutingModule } from './app-routing.module';
+import { WordsService } from './words.service';
+import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireModule } from 'angularfire2';
 import { AppComponent } from './app.component';
 import { WordsComponent } from './words/words.component';
+import { ManageComponent } from './manage/manage.component';
+import { FormsModule } from '@angular/forms';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WordsComponent,
+    ManageComponent,
+    SummaryComponent,
   ],
   imports: [
-    BrowserModule
+    FormsModule,
+    BrowserModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, ''),
+    AppRoutingModule
   ],
-  providers: [],
+  providers: [ WordsService, AngularFirestore ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
