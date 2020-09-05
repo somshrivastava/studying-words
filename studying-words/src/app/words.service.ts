@@ -17,10 +17,10 @@ export class WordsService {
   }
 
   addData(collectionName, data) {
-    return this.db.collection(`${collectionName}`).doc(`${data['id']}`).set(data);
+    return this.db.collection(`${collectionName}`).doc(`${data['word']}`).set(data);
   }
 
   deleteData(collectionName, data) {
-    return this.db.collection(`${collectionName}`).doc(`${data['id']}`).delete();
+    return this.db.collection(`${collectionName}`).doc(`${data['word']}`).delete();
   }
 }

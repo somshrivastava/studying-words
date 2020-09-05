@@ -15,15 +15,19 @@ export class WordsComponent implements OnInit {
   randomIndex: number;
   roundFinished: boolean;
   statsRecorded: boolean;
+  wordsCollection: string = '';
 
   constructor(private wordsService: WordsService) { }
 
-  ngOnInit() { 
+  ngOnInit() {  }
+
+   selectCollection(collection) {
+    this.wordsCollection = collection;
     this.getWords();
-   }
+  }
 
   getWords() {
-    this.wordsService.getData('words').snapshotChanges().subscribe(actionArray => {
+    this.wordsService.getData(`${this.wordsCollection}`).snapshotChanges().subscribe(actionArray => {
       this.words = actionArray.map(item => {
         return item.payload.doc.data() as Word
       })

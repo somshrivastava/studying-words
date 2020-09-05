@@ -14,15 +14,19 @@ export class ManageComponent implements OnInit {
     isCorrect: null
   }
   showAdd: boolean;
-
+  wordsCollection: string = '';
   constructor(private wordsService: WordsService) { }
 
-  ngOnInit() { 
+  ngOnInit() { }
+
+  selectCollection(collection) {
+    this.wordsCollection = collection;
     this.getWords();
-   }
+  }
 
   getWords() {
-    this.wordsService.getData('words').snapshotChanges().subscribe(actionArray => {
+    console.log(this.wordsCollection)
+    this.wordsService.getData(`${this.wordsCollection}`).snapshotChanges().subscribe(actionArray => {
       this.words = actionArray.map(item => {
         return item.payload.doc.data() as Word
       })
@@ -30,10 +34,20 @@ export class ManageComponent implements OnInit {
   }
 
   addWord() {
-    this.wordsService.addData('words', this.word)
+    this.word['word'].split(' ').forEach(word => {
+      this.word = {
+        word: word,
+        isCorrect: null
+      }
+      this.wordsService.addData(`${this.wordsCollection}`, this.word)
+    });
+    this.word = {
+      word: '',
+      isCorrect: null
+    }
   }
 
   deleteWord(word) {
-    this.wordsService.deleteData('words', word)
+    this.wordsService.deleteData(`${this.wordsCollection}`, word)
   }
 }
