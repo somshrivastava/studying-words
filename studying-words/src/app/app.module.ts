@@ -1,5 +1,5 @@
+import { LocalStorageService } from './local-storage.service';
 import { AppRoutingModule } from './app-routing.module';
-import { WordsService } from './words.service';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -24,7 +24,7 @@ import { SummaryComponent } from './summary/summary.component';
     AngularFireModule.initializeApp(environment.firebaseConfig, ''),
     AppRoutingModule
   ],
-  providers: [ WordsService, AngularFirestore ],
+  providers: [ AngularFirestore, LocalStorageService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

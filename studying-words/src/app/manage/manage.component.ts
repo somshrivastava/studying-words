@@ -1,5 +1,6 @@
+import { LocalStorageService } from './../local-storage.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Word } from './../word.model';
-import { WordsService } from './../words.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss']
 })
+
 export class ManageComponent implements OnInit {
   words = [];
   word: Word = {
@@ -15,7 +17,7 @@ export class ManageComponent implements OnInit {
   }
   showAdd: boolean;
   wordsCollection: string = '';
-  constructor(private wordsService: WordsService) { }
+  constructor(private db: AngularFirestore, private localStorageService: LocalStorageService) { }
 
   ngOnInit() { }
 
@@ -25,21 +27,28 @@ export class ManageComponent implements OnInit {
   }
 
   getWords() {
-    console.log(this.wordsCollection)
-    this.wordsService.getData(`${this.wordsCollection}`).snapshotChanges().subscribe(actionArray => {
-      this.words = actionArray.map(item => {
-        return item.payload.doc.data() as Word
-      })
-    });
+    if (this.localStorageService.get('words') == null || []) {
+      this.db.collection(`${this.wordsCollection}`).snapshotChanges()
+      .subscribe(actionArray => {
+        this.words = actionArray.map(item => {
+          return item.payload.doc.data() as Word
+        })
+      this.localStorageService.set('words', this.wordsCollection);
+      });
+    } else {
+      this.wordsCollection = this.localStorageService.get('words');
+    }
   }
 
   addWord() {
-    this.word['word'].split(' ').forEach(word => {
+    this.word['word'].split(',').forEach(word => {
       this.word = {
         word: word,
         isCorrect: null
       }
-      this.wordsService.addData(`${this.wordsCollection}`, this.word)
+      this.db.collection(`${this.wordsCollection}`).doc(`${this.word.word}`).set(this.word);
+      this.words.push(this.word);
+      this.localStorageService.set('words', this.words);
     });
     this.word = {
       word: '',
@@ -48,6 +57,8 @@ export class ManageComponent implements OnInit {
   }
 
   deleteWord(word) {
-    this.wordsService.deleteData(`${this.wordsCollection}`, word)
+    this.db.collection(`${this.wordsCollection}`).doc(`${word.word}`).delete();
+    this.words.splice(this.words.indexOf(word), 1);
+    this.localStorageService.set('words', this.words);
   }
 }

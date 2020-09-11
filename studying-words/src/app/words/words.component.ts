@@ -1,4 +1,5 @@
-import { WordsService } from './../words.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { LocalStorageService } from './../local-storage.service';
 import { Word } from './../word.model';
 import { Component, OnInit } from '@angular/core';
 
@@ -16,22 +17,43 @@ export class WordsComponent implements OnInit {
   roundFinished: boolean;
   statsRecorded: boolean;
   wordsCollection: string = '';
+  recordedStats = [];
 
-  constructor(private wordsService: WordsService) { }
+  constructor(private localStorageService: LocalStorageService, private db: AngularFirestore) { }
 
   ngOnInit() {  }
 
-   selectCollection(collection) {
+  selectCollection(collection) {
     this.wordsCollection = collection;
     this.getWords();
   }
 
   getWords() {
-    this.wordsService.getData(`${this.wordsCollection}`).snapshotChanges().subscribe(actionArray => {
-      this.words = actionArray.map(item => {
-        return item.payload.doc.data() as Word
-      })
-    });
+    if (this.localStorageService.get('words') == null || []) {
+      this.db.collection(`${this.wordsCollection}`).snapshotChanges()
+      .subscribe(actionArray => {
+        this.words = actionArray.map(item => {
+          return item.payload.doc.data() as Word
+        })
+      this.localStorageService.set('words', this.wordsCollection);
+      });
+    } else {
+      this.wordsCollection = this.localStorageService.get('words');
+    }
+  }
+
+  getRecordedStats() {
+    if (this.localStorageService.get('roundStats') == null || []) {
+      this.db.collection('roundStats').snapshotChanges()
+      .subscribe(actionArray => {
+        this.words = actionArray.map(item => {
+          return item.payload.doc.data() as Word
+        })
+      this.localStorageService.set('roundStats', this.recordedStats);
+      });
+    } else {
+      this.recordedStats = this.localStorageService.get('roundStats');
+    }
   }
 
   generateWord() {
@@ -50,7 +72,9 @@ export class WordsComponent implements OnInit {
   }
 
   recordStats(data) {
-    this.wordsService.writeData('roundStats', {'timestamp': new Date(), 'stats': data});
+    this.recordedStats.push({'timestamp': new Date(), 'stats': data});
+    this.db.collection('roundStats').doc(`${new Date}`).set({'timestamp': new Date(), 'stats': data});
+    this.localStorageService.set('roundStats', this.recordedStats);
     this.statsRecorded = true;
     setTimeout(() => {
       this.statsRecorded = false;
