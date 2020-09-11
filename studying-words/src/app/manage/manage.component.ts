@@ -33,7 +33,7 @@ export class ManageComponent implements OnInit {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
         })
-      this.localStorageService.set('words', this.wordsCollection);
+      this.localStorageService.set(`${this.wordsCollection}`, this.words);
       });
     } else {
       this.wordsCollection = this.localStorageService.get('words');
@@ -48,17 +48,18 @@ export class ManageComponent implements OnInit {
       }
       this.db.collection(`${this.wordsCollection}`).doc(`${this.word.word}`).set(this.word);
       this.words.push(this.word);
-      this.localStorageService.set('words', this.words);
+      this.localStorageService.set(`${this.wordsCollection}`, this.words);
     });
     this.word = {
       word: '',
       isCorrect: null
     }
+    this.showAdd = false;
   }
 
   deleteWord(word) {
     this.db.collection(`${this.wordsCollection}`).doc(`${word.word}`).delete();
     this.words.splice(this.words.indexOf(word), 1);
-    this.localStorageService.set('words', this.words);
+    this.localStorageService.set(`${this.wordsCollection}`, this.words);
   }
 }

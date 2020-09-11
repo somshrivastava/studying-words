@@ -8,10 +8,7 @@
             <h5>{{stat['timestamp']}}</h5>
             <hr>
             <div *ngFor='let word of stat["stats"]'>
-                <div (mouseover)='word.isShown = true' (mouseout)='word.isShown = false' class="bg-dark-text-light">
-                    <i class="fa" [class.fa-chevron-down]='!word.isShown' [class.fa-chevron-up]='word.isShown'></i>
-                </div>
-                <p *ngIf='word.isShown'>{{word['word']}} => {{word['isCorrect']}}</p>
+                <p [class.text-success]='word.isCorrect' [class.text-danger]='!word.isCorrect'>{{word['word']}} => {{word['isCorrect']}}</p>
             </div>
         </div>
     </div>

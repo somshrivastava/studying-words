@@ -21,11 +21,6 @@ export class RoundStatsComponent implements OnInit {
         this.recordedStats = actionArray.map(item => {
           return Object.assign({'isShown': false},  item.payload.doc.data());
         })
-      this.recordedStats.forEach(stat => {
-        stat['stats'].forEach(word =>  {
-          word = Object.assign({'isShown': false}, word);
-        })
-      })
       this.localStorageService.set('roundStats', this.recordedStats);
       });
     } else {

@@ -15,7 +15,6 @@ export class WordsComponent implements OnInit {
   usedWords: Word[] = [];
   randomIndex: number;
   roundFinished: boolean;
-  statsRecorded: boolean;
   wordsCollection: string = '';
   recordedStats = [];
 
@@ -24,21 +23,28 @@ export class WordsComponent implements OnInit {
   ngOnInit() { this.getRecordedStats(); }
 
   selectCollection(collection) {
+    this.usedWords = [];
+    this.usedIndexes = [];
+    this.words = [];
+    this.roundFinished = false;
+    this.randomIndex = null;
     this.wordsCollection = collection;
     this.getWords();
   }
 
   getWords() {
-    if (this.localStorageService.get('words') == null || []) {
+    if (this.localStorageService.get(`${this.wordsCollection}`) == null || []) {
       this.db.collection(`${this.wordsCollection}`).snapshotChanges()
       .subscribe(actionArray => {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
         })
+      console.log('db', this.words)
       this.localStorageService.set(`${this.wordsCollection}`, this.words);
       });
     } else {
-      this.wordsCollection = this.localStorageService.get('words');
+      console.log('localstorage', this.words)
+      this.wordsCollection = this.localStorageService.get(`${this.wordsCollection}`);
     }
   }
 
@@ -61,6 +67,7 @@ export class WordsComponent implements OnInit {
     if (this.usedIndexes.includes(this.randomIndex)) {
       if (this.usedIndexes.length == this.words.length) {
         this.roundFinished = true;
+        this.recordStats();
       } else {
         this.generateWord();
       }
@@ -71,15 +78,10 @@ export class WordsComponent implements OnInit {
     }
   }
 
-  recordStats(data) {
-    // (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
-    this.recordedStats.push({'timestamp': `${new Date}`, 'stats': data});
-    this.db.collection('roundStats').doc(`${new Date}`).set({'timestamp': `${new Date}`, 'stats': data});
+  recordStats() {
+    this.recordedStats.push({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
+    this.db.collection('roundStats').doc(`${new Date}`).set({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
     this.localStorageService.set('roundStats', this.recordedStats);
-    this.statsRecorded = true;
-    setTimeout(() => {
-      this.statsRecorded = false;
-    }, 2000);
   }
 
   correctWord() {

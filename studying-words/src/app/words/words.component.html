@@ -1,11 +1,6 @@
 <div class="container">
     <input [(ngModel)]='wordsCollection' (keyup.enter)='selectCollection(wordsCollection)' class="form-control mt-3" placeholder="Type in a collection...">
-    
-    <div *ngIf='statsRecorded' class="card card-body bg-success recorded text-light">
-        Stats were successfully added!
-    </div>
     <div class="container mt-3">
-        <button *ngIf='roundFinished' (click)='recordStats(usedWords)' class="btn btn-block btn-outline-info mb-3">Record Stats</button>
         <button *ngIf='roundFinished' (click)='finishRound()' class="mb-3 btn btn-block btn-outline-danger">Finish</button>
         <button [class.d-none]='wordsCollection == 0' *ngIf='usedWords.length == 0' (click)='generateWord()' class="mb-3 btn btn-sm btn-block btn-outline-info">Generate</button>
         <div [class.d-none]='roundFinished' *ngIf='usedWords.length > 0' class="card">
