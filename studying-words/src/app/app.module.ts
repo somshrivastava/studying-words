@@ -10,6 +10,7 @@ import { WordsComponent } from './words/words.component';
 import { ManageComponent } from './manage/manage.component';
 import { FormsModule } from '@angular/forms';
 import { SummaryComponent } from './summary/summary.component';
+import { RoundStatsComponent } from './round-stats/round-stats.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SummaryComponent } from './summary/summary.component';
     WordsComponent,
     ManageComponent,
     SummaryComponent,
+    RoundStatsComponent,
   ],
   imports: [
     FormsModule,

@@ -21,7 +21,7 @@ export class WordsComponent implements OnInit {
 
   constructor(private localStorageService: LocalStorageService, private db: AngularFirestore) { }
 
-  ngOnInit() {  }
+  ngOnInit() { this.getRecordedStats(); }
 
   selectCollection(collection) {
     this.wordsCollection = collection;
@@ -35,7 +35,7 @@ export class WordsComponent implements OnInit {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
         })
-      this.localStorageService.set('words', this.wordsCollection);
+      this.localStorageService.set(`${this.wordsCollection}`, this.words);
       });
     } else {
       this.wordsCollection = this.localStorageService.get('words');
@@ -46,8 +46,8 @@ export class WordsComponent implements OnInit {
     if (this.localStorageService.get('roundStats') == null || []) {
       this.db.collection('roundStats').snapshotChanges()
       .subscribe(actionArray => {
-        this.words = actionArray.map(item => {
-          return item.payload.doc.data() as Word
+        this.recordedStats = actionArray.map(item => {
+          return item.payload.doc.data();
         })
       this.localStorageService.set('roundStats', this.recordedStats);
       });
@@ -72,8 +72,9 @@ export class WordsComponent implements OnInit {
   }
 
   recordStats(data) {
-    this.recordedStats.push({'timestamp': new Date(), 'stats': data});
-    this.db.collection('roundStats').doc(`${new Date}`).set({'timestamp': new Date(), 'stats': data});
+    // (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
+    this.recordedStats.push({'timestamp': `${new Date}`, 'stats': data});
+    this.db.collection('roundStats').doc(`${new Date}`).set({'timestamp': `${new Date}`, 'stats': data});
     this.localStorageService.set('roundStats', this.recordedStats);
     this.statsRecorded = true;
     setTimeout(() => {
