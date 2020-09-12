@@ -5,10 +5,11 @@
     </div>
     <div *ngIf='stat.isShown' class="card mrr-5 ml-5">
         <div class="card-body">
+            <h5>{{stat['collection']}}</h5>
             <h5>{{stat['timestamp']}}</h5>
             <hr>
             <div *ngFor='let word of stat["stats"]'>
-                <p [class.text-success]='word.isCorrect' [class.text-danger]='!word.isCorrect'>{{word['word']}} => {{word['isCorrect']}}</p>
+                <p [class.font-weight-bold]='!word.isCorrect' [class.text-success]='word.isCorrect' [class.text-danger]='!word.isCorrect'>{{word['word']}}</p>
             </div>
         </div>
     </div>

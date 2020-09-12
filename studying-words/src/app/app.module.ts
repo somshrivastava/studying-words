@@ -1,4 +1,4 @@
-import { LocalStorageService } from './local-storage.service';
+import { SessionStorageService } from './local-storage.service';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,7 +26,7 @@ import { RoundStatsComponent } from './round-stats/round-stats.component';
     AngularFireModule.initializeApp(environment.firebaseConfig, ''),
     AppRoutingModule
   ],
-  providers: [ AngularFirestore, LocalStorageService ],
+  providers: [ AngularFirestore, SessionStorageService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

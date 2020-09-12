@@ -1,7 +1,7 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { LocalStorageService } from './../local-storage.service';
+import { SessionStorageService } from './../local-storage.service';
 import { Word } from './../word.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'words',
@@ -9,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./words.component.scss']
 })
 export class WordsComponent implements OnInit {
+  @ViewChild("name") input: ElementRef;
+  displayCursor: boolean;
   currentWord: Word;
   words = [];
   usedIndexes = [];
@@ -18,7 +20,7 @@ export class WordsComponent implements OnInit {
   wordsCollection: string = '';
   recordedStats = [];
 
-  constructor(private localStorageService: LocalStorageService, private db: AngularFirestore) { }
+  constructor(private sessionStorageService: SessionStorageService, private db: AngularFirestore) { }
 
   ngOnInit() { this.getRecordedStats(); }
 
@@ -33,32 +35,32 @@ export class WordsComponent implements OnInit {
   }
 
   getWords() {
-    if (this.localStorageService.get(`${this.wordsCollection}`) == null || []) {
+    if (this.sessionStorageService.get(`${this.wordsCollection}`) == null) {
       this.db.collection(`${this.wordsCollection}`).snapshotChanges()
-      .subscribe(actionArray => {
+        .subscribe(actionArray => {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
         })
       console.log('db', this.words)
-      this.localStorageService.set(`${this.wordsCollection}`, this.words);
+      this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
       });
     } else {
-      console.log('localstorage', this.words)
-      this.wordsCollection = this.localStorageService.get(`${this.wordsCollection}`);
+      console.log('sessionStorage', this.words);
+      this.words = this.sessionStorageService.get(`${this.wordsCollection}`);
     }
   }
 
   getRecordedStats() {
-    if (this.localStorageService.get('roundStats') == null || []) {
+    if (this.sessionStorageService.get('roundStats') == null || []) {
       this.db.collection('roundStats').snapshotChanges()
       .subscribe(actionArray => {
         this.recordedStats = actionArray.map(item => {
           return item.payload.doc.data();
         })
-      this.localStorageService.set('roundStats', this.recordedStats);
+      this.sessionStorageService.set('roundStats', this.recordedStats);
       });
     } else {
-      this.recordedStats = this.localStorageService.get('roundStats');
+      this.recordedStats = this.sessionStorageService.get('roundStats');
     }
   }
 
@@ -81,17 +83,20 @@ export class WordsComponent implements OnInit {
   recordStats() {
     this.recordedStats.push({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
     this.db.collection('roundStats').doc(`${new Date}`).set({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
-    this.localStorageService.set('roundStats', this.recordedStats);
+    this.sessionStorageService.set('roundStats', this.recordedStats);
   }
 
   correctWord() {
     this.currentWord.isCorrect = true;
     this.generateWord();
+    this.displayCursor = true;
   }
 
   inCorrectWord() {
     this.currentWord.isCorrect = false;
     this.generateWord();
+    this.displayCursor = true;
+    this.input.nativeElement.focus();
   }
 
   finishRound() {

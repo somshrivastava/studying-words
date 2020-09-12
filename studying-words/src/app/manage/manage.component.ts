@@ -1,4 +1,4 @@
-import { LocalStorageService } from './../local-storage.service';
+import { SessionStorageService } from './../local-storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Word } from './../word.model';
 import { Component, OnInit } from '@angular/core';
@@ -17,7 +17,7 @@ export class ManageComponent implements OnInit {
   }
   showAdd: boolean;
   wordsCollection: string = '';
-  constructor(private db: AngularFirestore, private localStorageService: LocalStorageService) { }
+  constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService) { }
 
   ngOnInit() { }
 
@@ -27,16 +27,16 @@ export class ManageComponent implements OnInit {
   }
 
   getWords() {
-    if (this.localStorageService.get('words') == null || []) {
+    if (this.sessionStorageService.get('words') == null) {
       this.db.collection(`${this.wordsCollection}`).snapshotChanges()
       .subscribe(actionArray => {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
         })
-      this.localStorageService.set(`${this.wordsCollection}`, this.words);
+      this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
       });
     } else {
-      this.wordsCollection = this.localStorageService.get('words');
+      this.words = this.sessionStorageService.get('words');
     }
   }
 
@@ -48,7 +48,7 @@ export class ManageComponent implements OnInit {
       }
       this.db.collection(`${this.wordsCollection}`).doc(`${this.word.word}`).set(this.word);
       this.words.push(this.word);
-      this.localStorageService.set(`${this.wordsCollection}`, this.words);
+      this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
     });
     this.word = {
       word: '',
@@ -60,6 +60,6 @@ export class ManageComponent implements OnInit {
   deleteWord(word) {
     this.db.collection(`${this.wordsCollection}`).doc(`${word.word}`).delete();
     this.words.splice(this.words.indexOf(word), 1);
-    this.localStorageService.set(`${this.wordsCollection}`, this.words);
+    this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
   }
 }

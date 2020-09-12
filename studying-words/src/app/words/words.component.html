@@ -5,17 +5,17 @@
         <button [class.d-none]='wordsCollection == 0' *ngIf='usedWords.length == 0' (click)='generateWord()' class="mb-3 btn btn-sm btn-block btn-outline-info">Generate</button>
         <div [class.d-none]='roundFinished' *ngIf='usedWords.length > 0' class="card">
             <div class="card-body text-center">
-                <h3>{{ currentWord['word'] }}</h3>
-                <button (click)='correctWord()' class="btn btn-success mr-3">Correct</button>
-                <button (click)='inCorrectWord()' class="btn btn-danger">Incorrect</button>
+                <h1 class="display-1 mb-5">{{ currentWord['word'] }}</h1>
+                <button (mouseout)='displayCursor = false' [class.cursor]='displayCursor' (click)='correctWord()' class="btn correctness btn-success" style="margin-right: 20rem">Correct</button>
+                <button (mouseout)='displayCursor = false' [class.cursor]='displayCursor' (click)='inCorrectWord()' class="btn correctness btn-danger">Incorrect</button>
             </div>
         </div>
         <div *ngIf='roundFinished' class="card">
             <div class="card-body text-center">
                 <h3>Round Stats</h3>
                 <ul class="list-group">
-                    <li *ngFor='let word of usedWords' class="list-group-item">
-                        {{ word.word }} => {{ word.isCorrect }}
+                    <li [class.font-weight-bold]='!word.isCorrect' [class.text-success]='word.isCorrect' [class.text-danger]='!word.isCorrect' *ngFor='let word of usedWords' class="list-group-item">
+                        {{ word.word }}
                     </li>
                 </ul>
             </div>

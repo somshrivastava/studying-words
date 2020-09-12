@@ -16,9 +16,18 @@
 }
 
 .card {
-    width: 40%;
+    width: 100%;
 }
 
 .list-group-item {
     font-size: 2rem;
+}
+
+.correctness {
+    font-size: 4rem;
+    padding: 2rem;
+}
+
+.cursor {
+    cursor: none !important;
 }
