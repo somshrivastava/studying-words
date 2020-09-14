@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { WordsComponent } from './words/words.component';
 import { ManageComponent } from './manage/manage.component';
 import { FormsModule } from '@angular/forms';
-import { SummaryComponent } from './summary/summary.component';
 import { RoundStatsComponent } from './round-stats/round-stats.component';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { RoundStatsComponent } from './round-stats/round-stats.component';
     AppComponent,
     WordsComponent,
     ManageComponent,
-    SummaryComponent,
     RoundStatsComponent,
   ],
   imports: [

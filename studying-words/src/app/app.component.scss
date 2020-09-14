@@ -1,58 +1,39 @@
-.card-deck {
-    margin: auto;
-    width: 80%;
-    padding: 5rem 0;
-    height: 100vh;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+.navbar {
+    padding: 1rem;
+    width: 100%;
 
-    & .col-md-6 {
-        cursor: pointer;
+    & .navbar-nav {
+        animation: move-in-left 2s ease-in-out;
+        display: flex;
+        flex-direction: row;
 
-        & .card-header {
-            background-color: rgba(#36688D, 0.5) !important;
-            color: white;
+        & .nav-item {
             
-            & .title {
-                font-size: 2rem;
-                margin-bottom: 0;
-            }
-        }
-
-        & .list-group {
-            border-radius: 0;
-            font-size: 1.25rem;
-
-            &-item {
-                border-radius: 0;
-                transition: all 0.1s ease-in-out;
-
-                &:nth-child(odd) {
-                    background-color: rgba(#999, 0.2);
-                }
-        
-                &:nth-child(even) {
-                    background-color: rgba(#999, 0.4);
-                }
-
-                &:hover {
-                    background:white;
-                    color: black;
-                }
+            & .nav-link {
+                display: inline-block;
+                margin-right: 2rem;
+                font-size: 1.5rem;
+                color: white;
             }
         }
     }
 }
 
-@media(max-width: 800px) {
-    .title {
-        font-size: 1.5rem;
+.active {
+    text-decoration: underline;
+}
+
+@media(max-width: 750px) {
+    .navbar {
+
+        & .navbar-nav {
+
+            & .nav-item {
+
+                & .nav-link {
+                    margin-right: 1rem;
+                }
+            }
+        }
     }
 }

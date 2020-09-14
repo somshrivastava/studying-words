@@ -1,1 +1,12 @@
+<nav class="navbar bg-info mb-4">
+    <div class="container">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a routerLinkActive="active" routerLink="/manage" class="nav-link">Manage</a>
+                <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/words" class="nav-link">Words</a>
+                <a routerLinkActive="active" routerLink="/round-stats" class="nav-link">Round Stats</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <router-outlet></router-outlet>
