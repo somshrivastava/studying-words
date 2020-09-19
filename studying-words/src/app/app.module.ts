@@ -1,4 +1,4 @@
-import { SessionStorageService } from './local-storage.service';
+import { SessionStorageService } from './session-storage.service';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,4 +27,5 @@ import { RoundStatsComponent } from './round-stats/round-stats.component';
   providers: [ AngularFirestore, SessionStorageService ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

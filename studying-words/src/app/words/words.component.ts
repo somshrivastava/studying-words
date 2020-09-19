@@ -1,15 +1,15 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { SessionStorageService } from './../local-storage.service';
+import { SessionStorageService } from '../session-storage.service';
 import { Word } from './../word.model';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'words',
   templateUrl: './words.component.html',
   styleUrls: ['./words.component.scss']
 })
+
 export class WordsComponent implements OnInit {
-  @ViewChild("name") input: ElementRef;
   displayCursor: boolean;
   currentWord: Word;
   words = [];
@@ -36,7 +36,7 @@ export class WordsComponent implements OnInit {
 
   getWords() {
     if (this.sessionStorageService.get(`${this.wordsCollection}`) == null) {
-      this.db.collection(`${this.wordsCollection}`).snapshotChanges()
+      this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).snapshotChanges()
         .subscribe(actionArray => {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
@@ -52,7 +52,7 @@ export class WordsComponent implements OnInit {
 
   getRecordedStats() {
     if (this.sessionStorageService.get('roundStats') == null || []) {
-      this.db.collection('roundStats').snapshotChanges()
+      this.db.collection('studying-words').doc('studying-words').collection('roundStats').snapshotChanges()
       .subscribe(actionArray => {
         this.recordedStats = actionArray.map(item => {
           return item.payload.doc.data();
@@ -82,7 +82,7 @@ export class WordsComponent implements OnInit {
 
   recordStats() {
     this.recordedStats.push({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
-    this.db.collection('roundStats').doc(`${new Date}`).set({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
+    this.db.collection('studying-words').doc('studying-words').collection('roundStats').doc(`${new Date}`).set({'collection': `${this.wordsCollection}`, 'timestamp': `${new Date}`, 'stats': this.usedWords});
     this.sessionStorageService.set('roundStats', this.recordedStats);
   }
 
@@ -96,7 +96,6 @@ export class WordsComponent implements OnInit {
     this.currentWord.isCorrect = false;
     this.generateWord();
     this.displayCursor = true;
-    this.input.nativeElement.focus();
   }
 
   finishRound() {

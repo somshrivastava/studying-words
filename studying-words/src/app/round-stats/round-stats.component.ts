@@ -1,5 +1,5 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { SessionStorageService } from './../local-storage.service';
+import { SessionStorageService } from '../session-storage.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -16,7 +16,7 @@ export class RoundStatsComponent implements OnInit {
 
   getRecordedStats() {
     if (this.sessionStorageService.get('roundStats') == null || []) {
-      this.db.collection('roundStats').snapshotChanges()
+      this.db.collection('studying-words').doc('studying-words').collection('roundStats').snapshotChanges()
       .subscribe(actionArray => {
         this.recordedStats = actionArray.map(item => {
           return Object.assign({'isShown': false},  item.payload.doc.data());

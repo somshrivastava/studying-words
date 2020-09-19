@@ -1,4 +1,4 @@
-import { SessionStorageService } from './../local-storage.service';
+import { SessionStorageService } from '../session-storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Word } from './../word.model';
 import { Component, OnInit } from '@angular/core';
@@ -28,7 +28,7 @@ export class ManageComponent implements OnInit {
 
   getWords() {
     if (this.sessionStorageService.get('words') == null) {
-      this.db.collection(`${this.wordsCollection}`).snapshotChanges()
+      this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).snapshotChanges()
       .subscribe(actionArray => {
         this.words = actionArray.map(item => {
           return item.payload.doc.data() as Word
@@ -46,7 +46,7 @@ export class ManageComponent implements OnInit {
         word: word,
         isCorrect: null
       }
-      this.db.collection(`${this.wordsCollection}`).doc(`${this.word.word}`).set(this.word);
+      this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).doc(`${this.word.word}`).set(this.word);
       this.words.push(this.word);
       this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
     });
@@ -58,7 +58,7 @@ export class ManageComponent implements OnInit {
   }
 
   deleteWord(word) {
-    this.db.collection(`${this.wordsCollection}`).doc(`${word.word}`).delete();
+    this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).doc(`${word.word}`).delete();
     this.words.splice(this.words.indexOf(word), 1);
     this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
   }
