@@ -1,5 +1,5 @@
 ## Deployment Steps
 
 firebase init hosting
-firebase target:apply hosting studying-words-dev studying-words-dev
-firebase deploy --only hosting:studying-words-dev
+firebase target:apply hosting studying-words-prod studying-words-prod
+firebase deploy --only hosting:studying-words-prod
