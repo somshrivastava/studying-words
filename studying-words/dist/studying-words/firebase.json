@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "target": "studying-words-prod",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

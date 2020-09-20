@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "prod-6a983"
+  },
+  "targets": {
+    "prod-6a983": {
+      "hosting": {
+        "studying-words-prod": [
+          "studying-words-prod"
+        ]
+      }
+    }
+  }
+}
