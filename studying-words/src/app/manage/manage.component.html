@@ -1,23 +1,20 @@
-<div class="container">
-    <input [(ngModel)]='wordsCollection' (keyup.enter)='selectCollection(wordsCollection)' class="form-control mt-3" placeholder="Type in a collection...">
-    <h3 class="my-4">Number of Words: {{this.words.length}}</h3>
-    <table class="table table-hover table-striped">
-        <thead>
-            <th>Word</th>
-            <th><button (click)='showAdd = true' class="btn btn-sm btn-success"><i class="fa fa-plus"></i></button></th>
-        </thead>
-        <tbody>
-            <tr *ngIf='showAdd'>
-                <td><input [(ngModel)]='word["word"]' type="text" class="form-control"></td>
-                <td>
-                    <button (click)='addWord()' class="btn btn-sm btn-success mr-3"><i class="fa fa-check"></i></button>
-                    <button (click)='showAdd = false' class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
-                </td>
-            </tr>
-            <tr *ngFor='let word of words'>
-                <td><span>{{ word.word }}</span></td>
-                <td><button (click)='deleteWord(word)' class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button></td>
-            </tr>
-        </tbody>
-    </table>
+<div *ngIf='!collectionCreated' class="my-card" style="margin-bottom: 10rem;">
+    <h1 class="my-card-title">Manage Words</h1>
+    <div class="my-card-body">
+        <button *ngIf='!createCollection' (click)='createCollection = true' class="my-btn-add btn-block mb-4" style="font-size: 2rem;">Create Collection</button>  
+        <div *ngIf='createCollection'>
+            <input [(ngModel)]='newCollectionName' type="text" placeholder="Create a collection name ..." class="my-collection-input w-100 mb-4">  
+            <button (click)='addCollection()' class="my-btn-add mb-4" style="font-size: 2rem;">Create</button>      
+        </div>
+        <button (click)='getCollections()' class="my-btn-add btn-block mb-4" style="font-size: 2rem;">Select Collection</button>
+        <button (click)='getCollections()' class="my-btn-delete btn-block mb-4" style="font-size: 2rem;">Delete Collection</button>
+        <div *ngFor='let collection of allCollections'>
+            <button *ngIf='deleteEditCollections' class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-4 w-50" style="font-size: 2rem;">
+                <span>{{collection | uppercase}}</span>
+                <span (click)='deleteCollection(collection)'><i class="fa fa-times"></i></span>
+            </button>
+        </div>
+    </div>
 </div>
+<button *ngIf='collectionCreated' (click)='goBack()' class="my-btn-delete ml-5 px-5 py-3" style="font-size: 2rem;">Back</button>
+<som-table *ngIf='collectionCreated' [add]="true" [edit]="true" [delete]="true" [database]="database" [storageName]="storageName" [rowModel]="rowModel"></som-table>

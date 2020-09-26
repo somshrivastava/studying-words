@@ -1,0 +1,41 @@
+.my-btn-add {
+    background: $primary;
+    color: white;
+    box-shadow: none;
+    border: none;
+    outline: none;
+
+    &:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.my-btn-edit {
+    background: $secondary;
+    color: white;
+    box-shadow: none;
+    border: none;
+    outline: none;
+
+    &:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.my-btn-delete {
+    background: $secondary;
+    color: white;
+    box-shadow: none;
+    border: none;
+    outline: none;
+
+    &:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+}

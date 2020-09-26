@@ -1,0 +1,29 @@
+.my-table-input {
+    animation: fade-input 3s ease-in-out infinite;
+    color: white;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+
+    &:focus {
+        animation: none;
+        background: $secondary;
+    }
+}
+
+.my-collection-input {
+    padding: 1rem;
+    font-size: 1.5rem;
+    background: $tertiary;
+    color: white;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+
+    &:focus {
+        animation: none;
+        background: rgba($primary, 0.5);
+    }
+}

@@ -1,0 +1,36 @@
+.table {
+    font-size: 2rem;
+
+    & button {
+        font-size: 2rem;
+    }
+
+    & thead {
+        background: $secondary;
+        
+        & th {
+            font-size: 1.5rem;
+            color: white;    
+            font-weight: 400;
+            letter-spacing: 0.25rem;
+        }
+    }
+
+    & tbody {
+
+        & tr {
+
+            & td {
+                padding: 1rem 5rem;
+            }
+
+            &:nth-child(odd) {
+                background: rgba($primary, 0.25);
+            }
+
+            &:nth-child(even) {
+                background: $tertiary;
+            }
+        }
+    }
+}

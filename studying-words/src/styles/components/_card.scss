@@ -1,0 +1,16 @@
+.my-card {
+    border-radius: 5rem;
+    border: 2px solid $primary;
+    padding: 5rem;
+    width: 50%;
+    margin: auto;
+
+    &-title {
+        padding-bottom: 2rem;
+        border-bottom: 10px solid $secondary;
+    }
+
+    &-body {
+        padding-top: 2rem;
+    }
+}
