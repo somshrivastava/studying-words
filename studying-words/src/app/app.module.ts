@@ -1,31 +1,37 @@
-import { SessionStorageService } from './session-storage.service';
-import { AppRoutingModule } from './app-routing.module';
 import { environment } from './../environments/environment';
+import { SessionStorageService } from './storage.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireModule } from 'angularfire2';
-import { AppComponent } from './app.component';
-import { WordsComponent } from './words/words.component';
-import { ManageComponent } from './manage/manage.component';
 import { FormsModule } from '@angular/forms';
-import { RoundStatsComponent } from './round-stats/round-stats.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestore } from '@angular/fire/firestore';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { SomTableComponent } from './som-table/som-table.component';
+import { ManageComponent } from './manage/manage.component';
+import { StudyComponent } from './study/study.component';
+import { RecordsComponent } from './records/records.component';
+import { RecordComponent } from './record/record.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WordsComponent,
+    SomTableComponent,
     ManageComponent,
-    RoundStatsComponent,
+    StudyComponent,
+    RecordsComponent,
+    RecordComponent,
+    HomeComponent
   ],
   imports: [
-    FormsModule,
     BrowserModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig, ''),
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, '')
   ],
   providers: [ AngularFirestore, SessionStorageService ],
   bootstrap: [AppComponent]
 })
-
 export class AppModule { }

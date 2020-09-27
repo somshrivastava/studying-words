@@ -1,0 +1,13 @@
+@keyframes fade-input {
+    0% {
+        border-bottom: 4px solid $tertiary;
+    }
+
+    50% {
+        border-bottom: 4px solid $primary;
+    }
+
+    100% {
+        border-bottom: 4px solid $tertiary;
+    }
+}
