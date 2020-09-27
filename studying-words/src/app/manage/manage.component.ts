@@ -60,6 +60,23 @@ export class ManageComponent implements OnInit {
     this.deleteEditCollections = true;
   }
 
+  addCollection() {
+    this.db.collection('studying-words').doc('studying-words').collection('allCollections').doc(`${this.newCollectionName}`).set({name: this.newCollectionName});
+    this.goToCollection(this.newCollectionName);
+  }
+
+  deleteCollection(collection) {
+    this.allCollections.splice(this.allCollections.indexOf(collection), 1);
+    this.sessionStorageService.remove(`${collection}`)
+    this.db.collection('studying-words').doc('studying-words').collection(`${collection}`).snapshotChanges()
+      .subscribe(actionArray => {
+        actionArray.forEach(document => {
+          this.db.collection('studying-words').doc('studying-words').collection(`${collection}`).doc(`${document.payload.doc.data()["name"]}`).delete();
+        })   
+      })
+    this.db.collection('studying-words').doc('studying-words').collection('allCollections').doc(`${collection}`).delete();
+    }
+
   goBack() {
     this.database = null;
     this.storageName = '';

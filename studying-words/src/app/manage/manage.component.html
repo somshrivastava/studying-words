@@ -7,8 +7,8 @@
             <button (click)='addCollection()' class="my-btn-add mb-4" style="font-size: 2rem;">Create</button>      
         </div>
         <div *ngFor='let collection of allCollections'>
-            <button routerLink="/manage/{{collection}}" (click)="goToCollection(collection)" *ngIf='deleteEditCollections' class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-4 w-100" style="font-size: 2rem;">
-                <span>{{collection}}</span>
+            <button *ngIf='deleteEditCollections' class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-4 w-100" style="font-size: 2rem;">
+                <span routerLink="/manage/{{collection}}" (click)="goToCollection(collection)">{{collection}}</span>
                 <span (click)='deleteCollection(collection)'><i class="fa fa-times"></i></span>
             </button>
         </div>
