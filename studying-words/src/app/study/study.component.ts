@@ -1,4 +1,3 @@
-import { Word } from './../manage/manage.component';
 import { SessionStorageService } from './../storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
@@ -10,34 +9,52 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudyComponent implements OnInit {
   allCollections = [];
-  collectionWords: Word[] = [];
+  collectionWords = [];
   studying: boolean;
   currentWord;
   currentCollection;
   collectionIndex = 0;
+  studyFinished: boolean;
+  previousCollection;
 
   constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService) { }
 
   ngOnInit() {
-    this.getCollections();
+    this.getAllCollections();
   }
 
   studyCollection(collection) {
-    this.studying = true;
-    this.currentCollection = collection;
-    this.collectionWords = this.sessionStorageService.get(`${this.currentCollection}`);
-    this.currentWord = this.collectionWords[this.collectionIndex];
+    if (this.sessionStorageService.get(`${collection}`) == null || this.sessionStorageService.get(`${collection}`) == []) {
+      this.db.collection('studying-words').doc('studying-words').collection(`${collection}`).snapshotChanges()
+        .subscribe(actionArray => {
+          this.collectionWords = actionArray.map(item => {
+            return item.payload.doc.data()
+          })
+          this.sessionStorageService.set(`${collection}`, this.collectionWords);
+          console.log('Firebase');
+        })
+    } else {
+      this.collectionWords = this.sessionStorageService.get(`${collection}`);
+      console.log('Session Storage')
+    }
+    setTimeout(() => {
+      this.currentCollection = collection;
+      this.currentWord = this.collectionWords[this.collectionIndex];
+      this.studyFinished = false;
+      this.studying = true;
+    }, 250);
   }
 
   correctWord() {
-    if (this.collectionIndex = this.collectionWords.length - 1) {
-      console.log(this.collectionWords)
-      console.log('asdf');
-      this.collectionIndex = 0;
+    if (this.collectionIndex > this.collectionWords.length - 2) {
+      console.log(this.collectionWords);
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({name: `${new Date()}`, records: this.collectionWords});
+      this.previousCollection = this.currentCollection;
+      this.stopGame();
+      this.studyFinished = true;
     } else {
       this.currentWord["isCorrect"] = true;
       this.collectionWords[this.collectionIndex]["isCorrect"] = true;
-      console.log(this.collectionWords);
       this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
       this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
       this.collectionIndex += 1;
@@ -46,13 +63,14 @@ export class StudyComponent implements OnInit {
   }
 
   inCorrectWord() {
-    if (this.collectionIndex = this.collectionWords.length - 1) {
-      console.log('asdf');
-      this.collectionIndex = 0;
+    if (this.collectionIndex > this.collectionWords.length - 2) {
+      this.previousCollection = this.currentCollection;
+      this.stopGame();
+      this.studyFinished = true;
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({name: `${new Date()}`, records: this.collectionWords});
     } else {
       this.currentWord["isCorrect"] = false;
       this.collectionWords[this.collectionIndex]["isCorrect"] = false;
-      console.log(this.collectionWords);
       this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
       this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
       this.collectionIndex += 1;
@@ -61,17 +79,19 @@ export class StudyComponent implements OnInit {
   }
 
   stopGame() {
-    this.studying = false;
+    this.collectionIndex = 0;
+    this.currentCollection = '';
     this.collectionWords = [];
+    this.studying = false;
+    this.studyFinished = false;
   }
 
-  getCollections() {
+  getAllCollections() {
     this.db.collection('studying-words').doc('studying-words').collection('allCollections').snapshotChanges()
       .subscribe(actionArray => {
         this.allCollections = actionArray.map(collection => {
           return collection.payload.doc.data()["name"];
         })
-        console.log(this.allCollections);
       })
   }
 }

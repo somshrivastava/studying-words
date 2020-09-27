@@ -11,13 +11,15 @@ import { AppComponent } from './app.component';
 import { SomTableComponent } from './som-table/som-table.component';
 import { ManageComponent } from './manage/manage.component';
 import { StudyComponent } from './study/study.component';
+import { RecordsComponent } from './records/records.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SomTableComponent,
     ManageComponent,
-    StudyComponent
+    StudyComponent,
+    RecordsComponent
   ],
   imports: [
     BrowserModule,

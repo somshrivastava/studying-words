@@ -1,6 +1,7 @@
 import { SessionStorageService } from './../storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface Word {
   name: string,
@@ -20,6 +21,7 @@ export class ManageComponent implements OnInit {
     name: '',
     isCorrect: false
   }
+  objectFields = ["name"];
   allCollections = [];
 
   createCollection: boolean;
@@ -28,11 +30,16 @@ export class ManageComponent implements OnInit {
   
   deleteEditCollections: boolean;
 
-  constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService) { 
+  constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService, private route: ActivatedRoute) { 
   }
 
   ngOnInit() {
-    this.getCollections();
+    this.getAllCollections();
+    this.route.params.subscribe(params => {
+      if (params["collection"] != undefined) {
+        this.goToCollection(params["collection"]);
+      }
+    })
   }
 
   goToCollection(collection) {
@@ -43,40 +50,14 @@ export class ManageComponent implements OnInit {
     this.newCollectionName = '';
   }
 
-  getCollections() {
+  getAllCollections() {
     this.db.collection('studying-words').doc('studying-words').collection('allCollections').snapshotChanges()
       .subscribe(actionArray => {
         this.allCollections = actionArray.map(collection => {
           return collection.payload.doc.data()["name"];
-        })
-        console.log(this.allCollections);
+        })   
       })
-      this.deleteEditCollections = true;
-  }
-
-  addCollection() {
-    this.database = this.db.collection('studying-words').doc('studying-words').collection(`${this.newCollectionName}`);
-    this.storageName = `${this.newCollectionName}`;
-    this.allCollections.push(this.newCollectionName);
-    this.db.collection('studying-words').doc('studying-words').collection('allCollections').doc(`${this.newCollectionName}`).set({name: this.newCollectionName});
-    this.sessionStorageService.set('allCollections', this.allCollections);
-    this.collectionCreated = true;
-    this.createCollection = false;
-    this.newCollectionName = '';
-  }
-
-  deleteCollection(name) {
-    this.allCollections.splice(this.allCollections.indexOf(name), 1);
-    this.sessionStorageService.set('allCollections', this.allCollections);
-    this.db.collection('studying-words').doc('studying-words').collection(`allCollections`).doc(`${name}`).delete();
-    this.db.collection('studying-words').doc('studying-words').collection(`${name}`).snapshotChanges()
-      .subscribe(actionArray => {
-        actionArray.forEach(collection => {
-          console.log(collection.payload.doc.data()["name"])
-          this.db.collection('studying-words').doc('studying-words').collection(`${name}`).doc(`${collection.payload.doc.data()["name"]}`).delete();
-        })
-      })
-    this.sessionStorageService.remove(`${name}`);
+    this.deleteEditCollections = true;
   }
 
   goBack() {

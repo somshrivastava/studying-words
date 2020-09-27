@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 
 export class SomTableComponent implements OnInit {
+  @Input() objectFields;
+  @Input() allData;
   @Input() database;
   @Input() storageName;
   @Input() rowModel;
@@ -15,14 +17,20 @@ export class SomTableComponent implements OnInit {
   @Input() edit: boolean;
   @Input() delete: boolean;
   data = [];
-  objectFields = ["name"];
   editName = '';
   isAdd: boolean;
 
   constructor( private sessionStorageService: SessionStorageService) { }
 
   ngOnInit() {
-    this.getData();
+    console.log(this.allData)
+    if (this.allData == undefined) {
+      this.getData();
+      console.log('Using Database')
+    } else {
+      this.data = this.allData;
+      console.log('Not Using Database')
+    }
   }
 
   getData() {
@@ -33,12 +41,10 @@ export class SomTableComponent implements OnInit {
             return item.payload.doc.data()
           })
           this.sessionStorageService.set(`${this.storageName}`, this.data);
-          console.log(this.data)
           console.log('Firebase');
         })
     } else {
       this.data = this.sessionStorageService.get(`${this.storageName}`);
-      console.log(this.data)
       console.log('Session Storage')
     }
   }
@@ -47,8 +53,9 @@ export class SomTableComponent implements OnInit {
     this.data.push(this.rowModel);
     this.sessionStorageService.set(`${this.storageName}`, this.data);
     this.database.doc(`${this.rowModel["name"]}`).set(this.rowModel);
-    for (let i in Object.keys(this.rowModel)) {
-      console.log(Object.keys(this.rowModel)[i]);
+    this.rowModel = {
+      name: '',
+      isCorrect: null
     }
   }
 
