@@ -1,0 +1,18 @@
+<div *ngIf='!studying' class="my-card" style="margin-bottom: 10rem;">
+    <h1 class="my-card-title">Study Words</h1>
+    <div class="my-card-body">
+        <div *ngFor='let collection of allCollections'>
+            <button (click)="studyCollection(collection)" class="my-btn-delete mb-4 px-4 w-100" style="font-size: 2rem;">
+                <span>{{collection}}</span>
+            </button>
+        </div>
+    </div>
+</div>
+<button *ngIf='studying' (click)='stopGame()' class="my-btn-add ml-5 px-5 py-3" style="font-size: 3rem;">Stop Game</button>
+<div *ngIf='studying' class="my-card">
+    <h1 class="display-1 my-card-title text-center">{{currentWord.name}}</h1>
+    <div class="my-card-body d-flex flex-row justify-content-between flex-wrap text-center">
+        <button (click)='correctWord(currentWord)' style="font-size: 5rem;" class="p-5 my-btn-delete mb-4">Correct</button>
+        <button (click)='inCorrectWord(currentWord)' style="font-size: 5rem;" class="p-5 my-btn-add mb-4">Incorrect</button>
+    </div>
+</div>

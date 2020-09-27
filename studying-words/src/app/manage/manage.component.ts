@@ -32,6 +32,15 @@ export class ManageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getCollections();
+  }
+
+  goToCollection(collection) {
+    this.database = this.db.collection('studying-words').doc('studying-words').collection(`${collection}`);
+    this.storageName = `${collection}`;
+    this.collectionCreated = true;
+    this.createCollection = false;
+    this.newCollectionName = '';
   }
 
   getCollections() {
@@ -50,12 +59,16 @@ export class ManageComponent implements OnInit {
     this.storageName = `${this.newCollectionName}`;
     this.allCollections.push(this.newCollectionName);
     this.db.collection('studying-words').doc('studying-words').collection('allCollections').doc(`${this.newCollectionName}`).set({name: this.newCollectionName});
+    this.sessionStorageService.set('allCollections', this.allCollections);
     this.collectionCreated = true;
     this.createCollection = false;
     this.newCollectionName = '';
   }
 
   deleteCollection(name) {
+    this.allCollections.splice(this.allCollections.indexOf(name), 1);
+    this.sessionStorageService.set('allCollections', this.allCollections);
+    this.db.collection('studying-words').doc('studying-words').collection(`allCollections`).doc(`${name}`).delete();
     this.db.collection('studying-words').doc('studying-words').collection(`${name}`).snapshotChanges()
       .subscribe(actionArray => {
         actionArray.forEach(collection => {
@@ -63,11 +76,13 @@ export class ManageComponent implements OnInit {
           this.db.collection('studying-words').doc('studying-words').collection(`${name}`).doc(`${collection.payload.doc.data()["name"]}`).delete();
         })
       })
-    this.sessionStorageService.remove
+    this.sessionStorageService.remove(`${name}`);
   }
 
   goBack() {
-    this.collectionCreated = true;
+    this.database = null;
+    this.storageName = '';
+    this.collectionCreated = false;
     this.createCollection = false;
     this.newCollectionName = '';
   }

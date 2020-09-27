@@ -17,13 +17,11 @@ export class SomTableComponent implements OnInit {
   data = [];
   objectFields = ["name"];
   editName = '';
+  isAdd: boolean;
 
   constructor( private sessionStorageService: SessionStorageService) { }
 
   ngOnInit() {
-    // for (let i in Object.keys(this.rowModel)) {
-    //   console.log(typeof this.rowModel[`${Object.keys(this.rowModel)[i]}`]);
-    // }
     this.getData();
   }
 
@@ -35,10 +33,12 @@ export class SomTableComponent implements OnInit {
             return item.payload.doc.data()
           })
           this.sessionStorageService.set(`${this.storageName}`, this.data);
+          console.log(this.data)
           console.log('Firebase');
         })
     } else {
       this.data = this.sessionStorageService.get(`${this.storageName}`);
+      console.log(this.data)
       console.log('Session Storage')
     }
   }
@@ -47,7 +47,9 @@ export class SomTableComponent implements OnInit {
     this.data.push(this.rowModel);
     this.sessionStorageService.set(`${this.storageName}`, this.data);
     this.database.doc(`${this.rowModel["name"]}`).set(this.rowModel);
-    this.rowModel = {};
+    for (let i in Object.keys(this.rowModel)) {
+      console.log(Object.keys(this.rowModel)[i]);
+    }
   }
 
   editRow(row) {

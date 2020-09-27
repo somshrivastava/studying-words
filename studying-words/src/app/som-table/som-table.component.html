@@ -2,10 +2,13 @@
     <table class="table">
         <thead>
             <th (click)="sortName()" *ngFor='let rowHeader of objectFields'>{{rowHeader | uppercase}}</th>
-            <th></th>
+            <th>
+                <button *ngIf='!isAdd' (click)='isAdd = true' class="btn-block my-btn-add"><i class="fa fa-plus"></i></button>
+                <button *ngIf='isAdd' (click)='isAdd= false' class="btn-block my-btn-add"><i class="fa fa-times"></i></button>
+            </th>
         </thead>
         <tbody>
-            <tr *ngIf='add'>
+            <tr *ngIf='add && isAdd'>
                 <td *ngFor='let field of objectFields'><input class="my-table-input w-100" type="text" [(ngModel)]="rowModel[field]"></td>
                 <td><button (click)='addRow()' class="btn-block my-btn-add"><i class="fa fa-check"></i></button></td>
             </tr>

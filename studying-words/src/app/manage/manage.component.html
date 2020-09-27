@@ -6,15 +6,13 @@
             <input [(ngModel)]='newCollectionName' type="text" placeholder="Create a collection name ..." class="my-collection-input w-100 mb-4">  
             <button (click)='addCollection()' class="my-btn-add mb-4" style="font-size: 2rem;">Create</button>      
         </div>
-        <button (click)='getCollections()' class="my-btn-add btn-block mb-4" style="font-size: 2rem;">Select Collection</button>
-        <button (click)='getCollections()' class="my-btn-delete btn-block mb-4" style="font-size: 2rem;">Delete Collection</button>
         <div *ngFor='let collection of allCollections'>
-            <button *ngIf='deleteEditCollections' class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-4 w-50" style="font-size: 2rem;">
-                <span>{{collection | uppercase}}</span>
+            <button (click)="goToCollection(collection)" *ngIf='deleteEditCollections' class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-4 w-100" style="font-size: 2rem;">
+                <span>{{collection}}</span>
                 <span (click)='deleteCollection(collection)'><i class="fa fa-times"></i></span>
             </button>
         </div>
     </div>
 </div>
-<button *ngIf='collectionCreated' (click)='goBack()' class="my-btn-delete ml-5 px-5 py-3" style="font-size: 2rem;">Back</button>
+<button *ngIf='collectionCreated' (click)='goBack()' class="my-btn-delete px-5 py-3 mb-4" style="font-size: 2rem;">Back</button>
 <som-table *ngIf='collectionCreated' [add]="true" [edit]="true" [delete]="true" [database]="database" [storageName]="storageName" [rowModel]="rowModel"></som-table>

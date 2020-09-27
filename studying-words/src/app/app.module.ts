@@ -10,12 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SomTableComponent } from './som-table/som-table.component';
 import { ManageComponent } from './manage/manage.component';
+import { StudyComponent } from './study/study.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SomTableComponent,
-    ManageComponent
+    ManageComponent,
+    StudyComponent
   ],
   imports: [
     BrowserModule,
