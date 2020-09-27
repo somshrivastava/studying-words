@@ -1,14 +1,14 @@
 ## Deployment Steps
 
 firebase init hosting
-firebase target:apply hosting studying-words-staging studying-words-staging
-firebase deploy --only hosting:studying-words-staging
+firebase target:apply hosting studying-words studying-words
+firebase deploy --only hosting:studying-words
 
 ## firebase.json 
 
 {
   "hosting": {
-    "target": "studying-words-staging",
+    "target": "studying-words",
     "public": "public",
     "ignore": [
       "firebase.json",
