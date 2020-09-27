@@ -12,6 +12,7 @@ import { SomTableComponent } from './som-table/som-table.component';
 import { ManageComponent } from './manage/manage.component';
 import { StudyComponent } from './study/study.component';
 import { RecordsComponent } from './records/records.component';
+import { RecordComponent } from './record/record.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { RecordsComponent } from './records/records.component';
     SomTableComponent,
     ManageComponent,
     StudyComponent,
-    RecordsComponent
+    RecordsComponent,
+    RecordComponent
   ],
   imports: [
     BrowserModule,

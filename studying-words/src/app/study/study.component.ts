@@ -16,6 +16,9 @@ export class StudyComponent implements OnInit {
   collectionIndex = 0;
   studyFinished: boolean;
   previousCollection;
+  startTime;
+  endTime;
+  elapsedTime;
 
   constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService) { }
 
@@ -24,6 +27,10 @@ export class StudyComponent implements OnInit {
   }
 
   studyCollection(collection) {
+    if (this.startTime == undefined) {
+      this.startTime = new Date().getTime();
+      console.log('Start:', this.startTime);
+    }
     if (this.sessionStorageService.get(`${collection}`) == null || this.sessionStorageService.get(`${collection}`) == []) {
       this.db.collection('studying-words').doc('studying-words').collection(`${collection}`).snapshotChanges()
         .subscribe(actionArray => {
@@ -42,16 +49,19 @@ export class StudyComponent implements OnInit {
       this.currentWord = this.collectionWords[this.collectionIndex];
       this.studyFinished = false;
       this.studying = true;
-    }, 250);
+    }, 500);
   }
 
   correctWord() {
     if (this.collectionIndex > this.collectionWords.length - 2) {
-      console.log(this.collectionWords);
-      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({name: `${new Date()}`, records: this.collectionWords});
+      this.endTime = new Date().getTime();
+      console.log('End:', this.endTime);
+      this.elapsedTime = this.endTime - this.startTime;
+      console.log('Elapsed:', this.elapsedTime/1000);
       this.previousCollection = this.currentCollection;
       this.stopGame();
       this.studyFinished = true;
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime, name: `${new Date()}`, records: this.collectionWords});
     } else {
       this.currentWord["isCorrect"] = true;
       this.collectionWords[this.collectionIndex]["isCorrect"] = true;
@@ -64,10 +74,14 @@ export class StudyComponent implements OnInit {
 
   inCorrectWord() {
     if (this.collectionIndex > this.collectionWords.length - 2) {
+      this.endTime = new Date().getTime();
+      console.log('End:', this.endTime);
+      this.elapsedTime = this.endTime - this.startTime;
+      console.log('Elapsed:', this.elapsedTime/1000);
       this.previousCollection = this.currentCollection;
       this.stopGame();
       this.studyFinished = true;
-      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({name: `${new Date()}`, records: this.collectionWords});
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime, name: `${new Date()}`, records: this.collectionWords});
     } else {
       this.currentWord["isCorrect"] = false;
       this.collectionWords[this.collectionIndex]["isCorrect"] = false;
@@ -79,6 +93,9 @@ export class StudyComponent implements OnInit {
   }
 
   stopGame() {
+    this.startTime = undefined;
+    this.endTime = undefined;
+    this.elapsedTime = undefined;
     this.collectionIndex = 0;
     this.currentCollection = '';
     this.collectionWords = [];

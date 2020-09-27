@@ -1,0 +1,11 @@
+<div class="my-card" style="margin-bottom: 10rem;">
+    <h1 class="my-card-title">View Records</h1>
+    <div class="my-card-body">
+        <h2 class="display-4">No Records Right Now</h2>
+        <div *ngFor='let record of allRecords'>
+            <button routerLink='/records/{{record["name"]}}' class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-5 py-3 w-100" style="font-size: 2rem;">
+                <span>{{record["name"]}}</span>
+            </button>
+        </div>
+    </div>
+</div>

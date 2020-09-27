@@ -1,3 +1,4 @@
+import { RecordComponent } from './record/record.component';
 import { RecordsComponent } from './records/records.component';
 import { StudyComponent } from './study/study.component';
 import { ManageComponent } from './manage/manage.component';
@@ -9,6 +10,7 @@ const routes: Routes = [
   {path: 'study', component: StudyComponent},
   {path: 'records', component: RecordsComponent},
   {path: ':collection', component: ManageComponent},
+  {path: 'records/:record', component: RecordComponent}
 ];
 
 @NgModule({
