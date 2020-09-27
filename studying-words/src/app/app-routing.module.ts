@@ -1,3 +1,4 @@
+import { HomeComponent } from './home/home.component';
 import { RecordComponent } from './record/record.component';
 import { RecordsComponent } from './records/records.component';
 import { StudyComponent } from './study/study.component';
@@ -6,10 +7,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [ 
-  {path: '', component: ManageComponent},
+  {path: '', component: HomeComponent},
+  {path: 'manage', component: ManageComponent},
   {path: 'study', component: StudyComponent},
   {path: 'records', component: RecordsComponent},
-  {path: ':collection', component: ManageComponent},
+  {path: 'manage/:collection', component: ManageComponent},
   {path: 'records/:record', component: RecordComponent}
 ];
 

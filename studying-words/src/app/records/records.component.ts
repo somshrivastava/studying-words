@@ -24,6 +24,13 @@ export class RecordsComponent implements OnInit {
         this.allRecords = actionArray.map(record => {
           return record.payload.doc.data();
         })   
+      this.sessionStorageService.set('study-records', this.allRecords);
       })
+  }
+
+  deleteRecord(record) {
+    this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${this.allRecords[this.allRecords.indexOf(record)]["name"]}`).delete();
+    this.allRecords.splice(this.allRecords.indexOf(record), 1);
+    this.sessionStorageService.set('study-records', this.allRecords)
   }
 }

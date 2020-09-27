@@ -23,7 +23,8 @@ export class RecordComponent implements OnInit {
   }
 
   getData() {
-    this.db.collection('studying-words').doc('studying-words').collection('study-records').snapshotChanges()
+    setTimeout(() => {
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').snapshotChanges()
       .subscribe(actionArray => {
         actionArray.forEach(item => {
           if (item.payload.doc.data()["name"] == this.routeParam) {
@@ -34,5 +35,6 @@ export class RecordComponent implements OnInit {
         console.log(this.records)
         console.log('Firebase');
       })
-  }
+      }, 500);
+    }
 }

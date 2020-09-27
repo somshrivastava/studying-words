@@ -23,7 +23,6 @@ export class SomTableComponent implements OnInit {
   constructor( private sessionStorageService: SessionStorageService) { }
 
   ngOnInit() {
-    console.log(this.allData)
     if (this.allData == undefined) {
       this.getData();
       console.log('Using Database')

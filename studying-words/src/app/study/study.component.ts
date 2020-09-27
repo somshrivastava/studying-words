@@ -58,10 +58,10 @@ export class StudyComponent implements OnInit {
       console.log('End:', this.endTime);
       this.elapsedTime = this.endTime - this.startTime;
       console.log('Elapsed:', this.elapsedTime/1000);
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime/1000, name: `${new Date()}`, records: this.collectionWords});
       this.previousCollection = this.currentCollection;
       this.stopGame();
       this.studyFinished = true;
-      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime, name: `${new Date()}`, records: this.collectionWords});
     } else {
       this.currentWord["isCorrect"] = true;
       this.collectionWords[this.collectionIndex]["isCorrect"] = true;
@@ -78,10 +78,10 @@ export class StudyComponent implements OnInit {
       console.log('End:', this.endTime);
       this.elapsedTime = this.endTime - this.startTime;
       console.log('Elapsed:', this.elapsedTime/1000);
+      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime/1000, name: `${new Date()}`, records: this.collectionWords});
       this.previousCollection = this.currentCollection;
       this.stopGame();
       this.studyFinished = true;
-      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime, name: `${new Date()}`, records: this.collectionWords});
     } else {
       this.currentWord["isCorrect"] = false;
       this.collectionWords[this.collectionIndex]["isCorrect"] = false;

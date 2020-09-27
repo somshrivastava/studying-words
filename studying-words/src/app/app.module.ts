@@ -13,6 +13,7 @@ import { ManageComponent } from './manage/manage.component';
 import { StudyComponent } from './study/study.component';
 import { RecordsComponent } from './records/records.component';
 import { RecordComponent } from './record/record.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RecordComponent } from './record/record.component';
     ManageComponent,
     StudyComponent,
     RecordsComponent,
-    RecordComponent
+    RecordComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
