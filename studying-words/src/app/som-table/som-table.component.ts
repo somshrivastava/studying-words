@@ -25,10 +25,8 @@ export class SomTableComponent implements OnInit {
   ngOnInit() {
     if (this.allData == undefined) {
       this.getData();
-      console.log('Using Database')
     } else {
       this.data = this.allData;
-      console.log('Not Using Database')
     }
   }
 
