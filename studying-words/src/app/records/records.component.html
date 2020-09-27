@@ -1,0 +1,11 @@
+<div class="my-card" style="margin-bottom: 10rem;">
+    <h1 class="my-card-title">View Records</h1>
+    <div class="my-card-body">
+        <div *ngFor='let record of allRecords'>
+            <button class="d-flex flex-row justify-content-between my-btn-delete mb-4 px-5 py-3 w-100" style="font-size: 2rem;">
+                <span routerLink='/records/{{record["name"]}}'>{{record["name"]}}</span>
+                <span (click)='deleteRecord(record)'><i class="fa fa-times"></i></span>
+            </button>
+        </div>
+    </div>
+</div>

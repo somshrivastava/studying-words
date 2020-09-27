@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th *ngFor='let rowHeader of objectFields'>{{rowHeader | uppercase}}</th>
+            <th *ngIf='add'>
+                <button *ngIf='!isAdd' (click)='isAdd = true' class="btn-block my-btn-add"><i class="fa fa-plus"></i></button>
+                <button *ngIf='isAdd' (click)='isAdd= false' class="btn-block my-btn-add"><i class="fa fa-times"></i></button>
+            </th>
+        </thead>
+        <tbody>
+            <tr *ngIf='add && isAdd'>
+                <td *ngFor='let field of objectFields'><input class="my-table-input w-100" type="text" [(ngModel)]="rowModel[field]"></td>
+                <td><button (click)='addRow()' class="btn-block my-btn-add"><i class="fa fa-check"></i></button></td>
+            </tr>
+            <tr *ngFor='let row of data'>
+                <td (dblclick)="editingRow(row)" *ngFor='let field of objectFields'><span *ngIf='!row["isEdit"]'>{{row[field]}}</span><input *ngIf='row["isEdit"]' [(ngModel)]="row[field]" type="text" class="my-table-input"></td>
+                <td *ngIf='edit'>
+                    <button (click)="editRow(row)" *ngIf='row["isEdit"] && edit' class="btn-block my-btn-edit mr-3"><i class="fa fa-pencil"></i></button>
+                    <button *ngIf='delete' (click)='deleteRow(row)' class="btn-block my-btn-delete"><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

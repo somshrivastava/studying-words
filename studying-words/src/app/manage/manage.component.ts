@@ -1,65 +1,70 @@
-import { SessionStorageService } from '../session-storage.service';
+import { SessionStorageService } from './../storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Word } from './../word.model';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+export interface Word {
+  name: string,
+  isCorrect: boolean
+}
 
 @Component({
-  selector: 'manage',
+  selector: 'app-manage',
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss']
 })
 
 export class ManageComponent implements OnInit {
-  words = [];
-  word: Word = {
-    word: '',
-    isCorrect: null
+  database;
+  storageName;
+  rowModel: Word = {
+    name: '',
+    isCorrect: false
   }
-  showAdd: boolean;
-  wordsCollection: string = '';
-  constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService) { }
+  objectFields = ["name"];
+  allCollections = [];
 
-  ngOnInit() { }
+  createCollection: boolean;
+  newCollectionName: string = '';
+  collectionCreated: boolean;
+  
+  deleteEditCollections: boolean;
 
-  selectCollection(collection) {
-    this.wordsCollection = collection;
-    this.getWords();
-  }
-
-  getWords() {
-    if (this.sessionStorageService.get('words') == null) {
-      this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).snapshotChanges()
-      .subscribe(actionArray => {
-        this.words = actionArray.map(item => {
-          return item.payload.doc.data() as Word
-        })
-      this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
-      });
-    } else {
-      this.words = this.sessionStorageService.get('words');
-    }
+  constructor(private db: AngularFirestore, private sessionStorageService: SessionStorageService, private route: ActivatedRoute) { 
   }
 
-  addWord() {
-    this.word['word'].split(',').forEach(word => {
-      this.word = {
-        word: word,
-        isCorrect: null
+  ngOnInit() {
+    this.getAllCollections();
+    this.route.params.subscribe(params => {
+      if (params["collection"] != undefined) {
+        this.goToCollection(params["collection"]);
       }
-      this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).doc(`${this.word.word}`).set(this.word);
-      this.words.push(this.word);
-      this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
-    });
-    this.word = {
-      word: '',
-      isCorrect: null
-    }
-    this.showAdd = false;
+    })
   }
 
-  deleteWord(word) {
-    this.db.collection('studying-words').doc('studying-words').collection(`${this.wordsCollection}`).doc(`${word.word}`).delete();
-    this.words.splice(this.words.indexOf(word), 1);
-    this.sessionStorageService.set(`${this.wordsCollection}`, this.words);
+  goToCollection(collection) {
+    this.database = this.db.collection('studying-words').doc('studying-words').collection(`${collection}`);
+    this.storageName = `${collection}`;
+    this.collectionCreated = true;
+    this.createCollection = false;
+    this.newCollectionName = '';
+  }
+
+  getAllCollections() {
+    this.db.collection('studying-words').doc('studying-words').collection('allCollections').snapshotChanges()
+      .subscribe(actionArray => {
+        this.allCollections = actionArray.map(collection => {
+          return collection.payload.doc.data()["name"];
+        })   
+      })
+    this.deleteEditCollections = true;
+  }
+
+  goBack() {
+    this.database = null;
+    this.storageName = '';
+    this.collectionCreated = false;
+    this.createCollection = false;
+    this.newCollectionName = '';
   }
 }
