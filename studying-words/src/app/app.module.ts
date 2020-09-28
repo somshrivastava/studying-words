@@ -1,4 +1,4 @@
-import { environment } from './../environments/environment.staging';
+import { environment } from './../environments/environment.prod';
 import { SessionStorageService } from './storage.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
