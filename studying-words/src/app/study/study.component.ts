@@ -54,6 +54,10 @@ export class StudyComponent implements OnInit {
 
   correctWord() {
     if (this.collectionIndex > this.collectionWords.length - 2) {
+      this.currentWord["isCorrect"] = true;
+      this.collectionWords[this.collectionIndex]["isCorrect"] = true;
+      this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
+      this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
       this.endTime = new Date().getTime();
       console.log('End:', this.endTime);
       this.elapsedTime = this.endTime - this.startTime;
@@ -74,6 +78,10 @@ export class StudyComponent implements OnInit {
 
   inCorrectWord() {
     if (this.collectionIndex > this.collectionWords.length - 2) {
+      this.currentWord["isCorrect"] = false;
+      this.collectionWords[this.collectionIndex]["isCorrect"] = false;
+      this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
+      this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
       this.endTime = new Date().getTime();
       console.log('End:', this.endTime);
       this.elapsedTime = this.endTime - this.startTime;

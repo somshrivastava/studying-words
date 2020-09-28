@@ -2,7 +2,7 @@
 <div class="my-card" style="margin-bottom: 10rem;">
     <h1 class="my-card-title">{{record.name}}</h1>
     <div class="my-card-body">
-        <h2 class="mb-5">Elapsed Time: {{record.time}}</h2>
+        <h2 class="mb-5">Elapsed Time: <span *ngIf='record.time < 60'>{{record.time}} seconds</span><span *ngIf='record.time > 60'>{{record.time/60 | number}} minutes</span></h2>
         <div *ngFor='let record of records'>
             <button class="d-flex flex-row justify-content-between mb-4 px-5 py-3 w-100" [class.my-btn-add] = '!record.isCorrect' [class.my-btn-delete] = 'record.isCorrect' style="font-size: 2rem;">
                 <span>{{record.name}}</span>
