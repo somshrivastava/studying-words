@@ -56,6 +56,7 @@ export class ManageComponent implements OnInit {
         this.allCollections = actionArray.map(collection => {
           return collection.payload.doc.data()["name"];
         })   
+        console.log(this.allCollections)
       })
     this.deleteEditCollections = true;
   }

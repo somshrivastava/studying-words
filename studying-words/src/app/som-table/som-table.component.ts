@@ -47,9 +47,11 @@ export class SomTableComponent implements OnInit {
   }
 
   addRow() {
-    this.data.push(this.rowModel);
+    this.rowModel["name"].split(', ').forEach(word => {
+      this.data.push({name: word, isCorrect: false});
+      this.database.doc(`${word}`).set({name: word, isCorrect: false});
+    })
     this.sessionStorageService.set(`${this.storageName}`, this.data);
-    this.database.doc(`${this.rowModel["name"]}`).set(this.rowModel);
     this.rowModel = {
       name: '',
       isCorrect: null
