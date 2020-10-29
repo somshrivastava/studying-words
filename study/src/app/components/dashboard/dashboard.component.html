@@ -1,0 +1,15 @@
+<section class="manage">
+    <div (mouseover)="showOptions = true" class="trigger">
+        <i class="fa fa-chevron-right"></i>
+    </div>
+    <ul *ngIf="showOptions" class="navigation-menu">
+        <h1 class="navigation-title">Select A Table</h1>
+        <li [class.selected]="selectedTable == table" routerLink="/dashboard/{{table}}" *ngFor="let table of tables" class="nav-item">{{table}}</li>
+    </ul>
+    <section (mouseover)="showOptions = false" class="tables">
+        <som-table *ngIf="selectedTable == 'collections'" [database]="collectionsDatabase" [cudi]="collectionsCudi" [columns]="collectionsColumns"></som-table>  
+        <div *ngFor="let collection of collections">
+            <som-table *ngIf="selectedTable == collection.name" [database]="collection.collectionPath" [cudi]="collectionsCudi" [columns]="collectionsColumns"></som-table>
+        </div> 
+    </section>
+</section>

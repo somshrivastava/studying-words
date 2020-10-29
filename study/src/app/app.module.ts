@@ -1,18 +1,34 @@
+import { DataService } from './services/data.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FormsModule } from '@angular/forms';
+import { environment } from './../environments/environment.deve';
+import { AngularFireModule } from '@angular/fire';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SomTableComponent } from './components/som-table/som-table.component';
+import { StudyComponent } from './components/study/study.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DashboardComponent,
+    SomTableComponent,
+    StudyComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    FormsModule,
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, '')
   ],
-  providers: [],
+  providers: [
+    AngularFirestore,
+    DataService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

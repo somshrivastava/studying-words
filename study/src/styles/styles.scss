@@ -1,0 +1,66 @@
+@import 'abstract/variables';
+@import 'components/table';
+@import 'components/navbar';
+@import 'components/footer';
+
+html, body {
+    font-size: 10px;
+    line-height: 1.8;
+    font-family: 'Quicksand';
+    box-sizing: border-box;
+
+    & p {
+        margin: 0;
+    }
+
+    & a, .pointer {
+        cursor: pointer;
+    }
+
+    & input, textarea {
+        border-radius: 0;
+        border: 2px solid $bright;
+        width: 100%;
+        padding: 1rem;
+        
+        &:focus {
+            border: 2px solid $dark;
+            outline: none;
+            box-shadow: none;
+        }
+    }
+
+    & textarea {
+        height: 20rem;
+    }
+
+    & .checkbox-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 1.75rem;
+
+        & input {
+            width: 2.5rem;
+        }
+    }
+
+    & button {
+        border: 2px solid $bright;
+        background: transparent;
+        transition: all 0.25s ease;
+        font-size: 1.75rem;
+        padding: 0.5rem 1rem;
+
+        &:hover {
+            background: $dark;
+            border: 2px solid $dark;
+            color: $white;
+        }
+
+        &:focus {
+            border: 2px solid $dark;
+        }
+    }
+}

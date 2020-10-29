@@ -1,0 +1,208 @@
+.selectedOption {
+    background: $dark;
+    color: $white;
+}
+
+.auto-complete {
+    width: 20rem;
+    
+    & input {
+        width: 100%;
+    }
+
+    & ul  {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        & li {
+            border: 2px solid $bright;
+            border-top: none;
+        }
+    }
+}
+
+.file-import {
+    margin: 1rem 0;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    & .custom-file {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    &-button {
+        width: 20%;
+        padding: 0;
+        border-radius: 0;
+        font-size: 1.5rem;
+    }
+
+    & a {
+        font-size: 1.5rem;
+        color: $bright;
+        margin-bottom: 1rem;
+
+        &:hover {
+            color: $dark;
+            text-decoration: none;
+        }
+    }
+}
+
+.table-responsive {
+    margin-top: -0.1rem;
+    overflow-x: scroll;
+    width: 96vw;
+
+    .table {
+        margin: 0;
+        font-size: 1.5rem;
+    
+        & input, select, textarea {
+            font-size: 1.5rem;
+        }
+    
+        & thead {
+    
+            & th {
+                background: $dark;
+                color: $white;
+            }
+        }
+    
+        & tbody {
+    
+            & tr {
+                transition: all 0.1s ease-in-out;
+    
+                &:nth-child(even) {
+                    background: rgba($dark, 0.25);
+                }
+    
+                &:nth-child(odd) {
+                    background: rgba($bright, 0.25);
+                }
+    
+                &:hover {
+                    cursor: pointer;
+                    background: $white !important;
+                }
+    
+                & input, select {
+                    min-width: 10rem;
+                    padding: 0.5rem !important;
+                }
+    
+                & select {
+                    width: 100%;
+                    border: 2px solid $bright;
+                    height: 4rem;
+    
+                    &:focus {
+                        border: 2px solid $dark;
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+.manage {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+
+    & .trigger {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 4vw;
+        background: $dark;
+        color: $white;
+        min-height: 80vh;
+    }
+
+    & .navigation-menu {
+        z-index: 10000;
+        border-right: 4px solid $bright;
+        width: 20vw;
+        height: 100%;
+        margin: 0;
+        padding: 2.5rem;
+        padding-left: 0;
+        background: $dark;
+        color: $white;
+        list-style: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        & .navigation-title {
+            font-size: 2.5rem;
+            margin-left: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        & .nav-item {
+            text-transform: uppercase;
+            margin: 1.5rem 0;
+            padding: 1rem 2.5rem;
+            border-radius: 0 5rem 5rem 0;
+            border: 2px solid $white;
+            border-left: none;
+            font-size: 2rem;
+            transition: all 0.25s ease-in-out;
+            
+            &:hover {
+                background: $bright; 
+                color: $white;
+                cursor: pointer;
+            }
+
+            &:focus {
+                border: none;
+                outline: none;
+                box-shadow: none;
+            }
+        }
+
+        & .selected {
+            background: $bright;
+            color: $white;
+        }
+    }
+}
+
+@media(max-width: 772px) {
+    .manage {
+
+        & .navigation-menu {
+            width: 30vw;
+        }
+    }
+}
+
+@media(max-width: 550px) {
+    .manage {
+
+        & .trigger {
+            width: 6vw;
+        }
+
+        & .navigation-menu {
+            width: 55vw;
+        }
+
+        & .table-responsive {
+            width: 94vw;
+        }
+    }
+}

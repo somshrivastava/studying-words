@@ -1,0 +1,103 @@
+.navbar {
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.5rem 5rem;
+    background: $white;
+    border-bottom: 4px solid $bright;
+
+    & img {
+        border-radius: 0.5rem;
+        box-shadow: 0 0 1rem $bright;
+        width: 4rem;
+    }
+
+    &-brand {
+        color: $dark;
+        font-size: 3rem;
+        transition: all 0.25s ease-in-out;
+
+        &:hover {
+            color: $bright;
+        }
+    }
+
+    &-toggler {
+        color: $dark;
+        font-size: 3rem;
+        width: auto;
+
+        &:focus {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            color: $bright;
+        }
+
+        &:hover {
+            background: none;
+        }
+    }
+
+    &-collapse {
+
+        & .navbar-nav {
+
+            & .nav-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                
+                &:not(:last-child) {
+                    margin-right: 2.5rem;
+                }
+
+                & .nav-link {
+                    color: $dark;
+                    font-size: 2rem;
+                    transition: all 0.25s ease-in-out;
+
+                    &:hover {
+                        color: $bright;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 992px) {
+    .navbar {
+        padding: 1rem 2.5rem;
+
+        &-brand {
+            font-size: 2.5rem;
+        }
+
+        &-collapse {
+            text-align: right;
+
+            & .navbar-nav {
+
+                & .nav-item {
+
+                    &:not(:last-child) {
+                        margin-right: 0;
+                    }    
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 550px) {
+    .navbar {
+
+        &-brand {
+            font-size: 2rem;
+        }
+    }
+}

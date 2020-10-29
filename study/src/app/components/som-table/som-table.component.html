@@ -1,0 +1,66 @@
+<div *ngIf="cudi.import" class="file-import">
+    <div class="custom-file">
+        <input (change)="selectedFileName = $event.target.files[0].name;" #csvReader accept=".csv" type="file" class="custom-file-input" id="customFile">
+        <label class="custom-file-label" for="customFile">{{selectedFileName}}</label>
+    </div>
+    <button (click)="importCSVData()" class="file-import-button">Import</button>
+</div>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>
+                <i *ngIf="cudi.create && !adding" (click)="adding = true" class="text-light fa fa-plus pointer"></i>
+                <i *ngIf="cudi.create && adding" (click)="adding = false" class="text-danger fa fa-times pointer"></i>
+            </th>
+            <th *ngFor="let column of columns"> {{column.name}} </th>
+        </thead>
+        <tbody>
+            <tr *ngIf="adding && cudi.create">
+                <td (click)="createTableData()"><i class="text-success fa fa-check pointer"></i></td>
+                <td *ngFor="let column of columns">
+                    <input [(ngModel)]="newData[column.key]" *ngIf="column.type == 'text'" type="text" placeholder="{{column.name}}">                   
+                    <input [(ngModel)]="newData[column.key]" *ngIf="column.type == 'email'" type="email" placeholder="{{column.name}}">
+                    <input [(ngModel)]="newData[column.key]" *ngIf="column.type == 'tel'" type="tel" placeholder="{{column.name}}">
+                    <input [(ngModel)]="newData[column.key]" *ngIf="column.type == 'date'" type="date" placeholder="{{column.name}}">
+                    <input [(ngModel)]="newData[column.key]" *ngIf="column.type == 'number'" type="number" placeholder="{{column.name}}">
+                    <textarea [(ngModel)]="newData[column.key]" *ngIf="column.type == 'textarea'" cols="30" rows="10" placeholder="{{column.name}}"></textarea>
+                    <select [(ngModel)]="newData[column.key]" *ngIf="column.type == 'select' && column.optionKey == null">
+                        <option *ngFor="let option of column.options" value="{{option}}">{{option}}</option>
+                    </select>
+                    <select [(ngModel)]="newData[column.key]" *ngIf="column.type == 'select' && column.optionKey != null">
+                        <option *ngFor="let option of column.options" value="{{option[column.optionKey]}}">{{option[column.optionKey]}}</option>
+                    </select>
+                    <div class="auto-complete" *ngIf="column.type == 'autocomplete'">
+                        <input (keyup)="filteringText(newData[column.key], column)" type="text" id="search-text" [(ngModel)]="newData[column.key]" placeholder="{{column.name}}">
+                        <ul *ngIf="column.autoCompleteDisplay">
+                            <li (click)="selectOption(option, column)" *ngFor="let option of column.options | filter: 'name': newData[column.key]">
+                                {{option.name}}
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr class="pointer" (dblclick)="updatingTableData(row)" *ngFor="let row of data">
+                <td *ngIf="!row.isEdit" (click)="deleteTableData(row)"><i *ngIf="cudi.delete" class="text-danger fa fa-trash pointer"></i></td>
+                <td *ngIf="row.isEdit" (click)="updateTableData(row)"><i *ngIf="cudi.update" class="text-success fa fa-check pointer"></i></td>
+                <td (click)="navigateUser(column, row)" *ngFor="let column of columns"> 
+                    <span *ngIf="!row.isEdit || !column.edit"> {{row[column.key]}} </span>
+                    <div *ngIf="row.isEdit" class="isEdit">
+                        <input [(ngModel)]="row[column.key]" *ngIf="column.edit && column.type == 'text'" type="text" placeholder="{{column.name}}">
+                        <input [(ngModel)]="row[column.key]" *ngIf="column.edit && column.type == 'email'" type="email" placeholder="{{column.name}}">
+                        <input [(ngModel)]="row[column.key]" *ngIf="column.edit && column.type == 'tel'" type="tel" placeholder="{{column.name}}">    
+                        <input [(ngModel)]="row[column.key]" *ngIf="column.edit && column.type == 'date'" type="date" placeholder="{{column.name}}">
+                        <input [(ngModel)]="row[column.key]" *ngIf="column.edit && column.type == 'number'" type="number" placeholder="{{column.name}}">                        
+                        <textarea [(ngModel)]="row[column.key]" *ngIf="column.edit && column.type == 'textarea'" cols="30" rows="10" placeholder="{{column.name}}"></textarea>
+                        <select [(ngModel)]="row[column.key]" *ngIf="column.type == 'select' && column.optionKey == null">
+                            <option *ngFor="let option of column.options" value="{{option}}">{{option}}</option>
+                        </select>
+                        <select [(ngModel)]="row[column.key]" *ngIf="column.type == 'select' && column.optionKey != null">
+                            <option *ngFor="let option of column.options" value="{{option[column.optionKey]}}">{{option[column.optionKey]}}</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

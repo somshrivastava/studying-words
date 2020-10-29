@@ -28,7 +28,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/styles.scss"
             ],
             "scripts": []
           },
@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "study"
+    }
+  },
+  "defaultProject": "study",
+  "cli": {
+    "analytics": "0e5185d2-e374-4cc9-88b6-c3f8b2703074"
+  }
 }
