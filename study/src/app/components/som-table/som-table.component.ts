@@ -11,6 +11,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 })
 
 export class SomTableComponent implements OnInit {
+  @Input() title: string;
   @Input() database: string;
   @Input() columns: Column[];
   @Input() cudi: CUDI;
@@ -107,11 +108,17 @@ export class SomTableComponent implements OnInit {
 
   navigateUser(column, row) {
     if (column['navigateOnClick']) {
-      column['navigationPath'].push(row[column['navigationPathKey']]);
-      var index = column['navigationPath'].indexOf(row[column['navigationPathKey']])
+      column['navigationPathKey'].forEach(
+        key => {
+          column['navigationPath'].push(row[key]);
+        }
+      )
       this.router.navigate(column['navigationPath']);
-      column['navigationPath'].splice(index, 1);
+      column['navigationPathKey'].forEach(
+        key => {
+          column['navigationPath'].splice(column['navigationPath'].indexOf(key), 1)
+        }
+      )
     }
-
   }
 }

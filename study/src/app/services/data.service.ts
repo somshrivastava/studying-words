@@ -88,4 +88,8 @@ export class DataService {
     delete document["isEdit"];
     this.updateFirestoreDocument('static', documentID, document);
   }
+
+  getTimestamp() {
+    return `${new Date().getMonth()}/${new Date().getDate()}/${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}`;
+  }
 }

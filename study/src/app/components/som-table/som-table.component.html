@@ -1,3 +1,4 @@
+<h1 class="table-title">{{title}}</h1>
 <div *ngIf="cudi.import" class="file-import">
     <div class="custom-file">
         <input (change)="selectedFileName = $event.target.files[0].name;" #csvReader accept=".csv" type="file" class="custom-file-input" id="customFile">

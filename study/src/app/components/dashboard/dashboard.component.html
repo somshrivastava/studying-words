@@ -7,9 +7,14 @@
         <li [class.selected]="selectedTable == table" routerLink="/dashboard/{{table}}" *ngFor="let table of tables" class="nav-item">{{table}}</li>
     </ul>
     <section (mouseover)="showOptions = false" class="tables">
-        <som-table *ngIf="selectedTable == 'collections'" [database]="collectionsDatabase" [cudi]="collectionsCudi" [columns]="collectionsColumns"></som-table>  
+        <som-table *ngIf="selectedTable == 'collections'" [title]="collectionsTitle" [database]="collectionsDatabase" [cudi]="collectionsCudi" [columns]="collectionsColumns"></som-table>      
+        <som-table *ngIf="selectedTable == 'study'" [title]="studyTitle" [database]="studyDatabase" [cudi]="studyCudi" [columns]="studyColumns"></som-table>  
+        <som-table *ngIf="selectedTable == 'results'" [title]="resultsTitle" [database]="resultsDatabase" [cudi]="resultsCudi" [columns]="resultsColumns"></som-table>          
         <div *ngFor="let collection of collections">
-            <som-table *ngIf="selectedTable == collection.name" [database]="collection.collectionPath" [cudi]="collectionsCudi" [columns]="collectionsColumns"></som-table>
+            <som-table *ngIf="selectedTable == collection.name" [title]="collection.name" [database]="collection.collectionPath" [cudi]="collectionCudi" [columns]="collectionColumns"></som-table>
+        </div> 
+        <div *ngFor="let result of results">
+            <som-table *ngIf="selectedTable == result.timestamp" [title]="result.collectionName + ' Results'" [database]="result.collectionPath" [cudi]="resultCudi" [columns]="resultColumns"></som-table>
         </div> 
     </section>
 </section>

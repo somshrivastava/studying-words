@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from './../../services/data.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,118 +9,101 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudyComponent implements OnInit {
   collections: any[] = [];
-  collectionWords = [];
-  studying: boolean;
-  currentWord;
-  currentCollection;
-  collectionIndex = 0;
+  collectionName: string;
+  collectionID: any;
+  collection: any[] = [];
+  selectedWord: any = {
+    documentID: '',
+    name: '',
+    accuracy: false
+  };
   studyFinished: boolean;
-  previousCollection;
-  startTime;
-  endTime;
-  elapsedTime;
+  studyResults: any;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    this.dataService
-      .getFirestoreCollection('collections')
-      .subscribe(
-        collection => {
-          this.collections = collection.map(
-            document => {
-              return {
-                documentID: document.payload.doc.id,
-                ...document.payload.doc.data()
-              }
-            }
-          )
-        }
-      )
+    this.studyCollection();
   }
 
-  studyCollection(collection) {
-    if (this.startTime == undefined) {
-      this.startTime = new Date().getTime();
+  studyCollection() {
+      this.activatedRoute
+        .params
+        .subscribe(
+          params => {
+            this.collectionName = params.collection;
+            this.dataService
+              .getFirestoreCollection('collections')
+              .subscribe(
+                collection => {
+                  collection.forEach(
+                    document => {
+                      if (document.payload.doc.data().name == this.collectionName) {
+                        this.collectionID = document.payload.doc.id;
+                      }
+                    }
+                  )
+                  this.dataService
+                    .getFirestoreCollection(`collections/${this.collectionID}/words`)
+                    .subscribe(
+                      collection => {
+                        this.collection = collection.map(
+                          document => {
+                            return {
+                              documentID: document.payload.doc.id,
+                              ...document.payload.doc.data()
+                            }
+                          }
+                        )
+                        this.selectedWord = this.collection[0];
+                      }
+                    )
+                }
+              )
+          }
+        )
     }
-    this.dataService
-      .getFirestoreCollection(`collections/${collection.documentID}`)
-      .subscribe(
-        collection => {
-          this.collections = collection.map(
-            document => {
-              return {
-                documentID: document.payload.doc.id,
-                ...document.payload.doc.data()
-              }
-            }
-          )
-        }
-      )
-    setTimeout(() => {
-      this.currentCollection = collection;
-      this.currentWord = this.collectionWords[this.collectionIndex];
-      this.studyFinished = false;
-      this.studying = true;
-    }, 500);
+
+  nextWord(index) {
+    this.selectedWord = this.collection[index];
   }
 
-  correctWord() {
-    if (this.collectionIndex > this.collectionWords.length - 2) {
-      this.currentWord["isCorrect"] = true;
-      this.collectionWords[this.collectionIndex]["isCorrect"] = true;
-      this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
-      this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
-      this.endTime = new Date().getTime();
-      console.log('End:', this.endTime);
-      this.elapsedTime = this.endTime - this.startTime;
-      console.log('Elapsed:', this.elapsedTime/1000);
-      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime/1000, name: `${new Date()}`, records: this.collectionWords});
-      this.previousCollection = this.currentCollection;
-      this.stopGame();
+  studyWord(accuracy, selectedWord) {
+     if (this.collection.indexOf(selectedWord) == this.collection.length - 1) {
+      if (accuracy == 'true') {
+        this.collection[this.collection.indexOf(selectedWord)].accuracy = true;
+      } else {
+        this.collection[this.collection.indexOf(selectedWord)].accuracy = false;
+      }
       this.studyFinished = true;
+      setTimeout(() => {
+        var correctNumber: number = 0;
+        var incorrectNumber: number = 0;
+        this.studyFinished = false;
+        this.router.navigate(['dashboard', 'study']);
+        this.collection.forEach(
+          word => {
+            if (word.accuracy == false) {
+              incorrectNumber += 1;
+            } else {
+              correctNumber += 1;
+            }
+          }
+        )
+        this.dataService.createFirestoreDocumentWithID('results', `${this.dataService.getTimestamp().replaceAll('/', '&')}`, {collectionName: this.collectionName, correct: correctNumber, incorrect: incorrectNumber, timestamp: this.dataService.getTimestamp()});
+        this.collection.forEach(
+          word => {
+            this.dataService.createFirestoreDocument(`results/${this.dataService.getTimestamp().replaceAll('/', '&')}/resultsData`, word)
+          }
+        )
+      }, 5000);
     } else {
-      this.currentWord["isCorrect"] = true;
-      this.collectionWords[this.collectionIndex]["isCorrect"] = true;
-      this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
-      this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
-      this.collectionIndex += 1;
-      this.studyCollection(this.currentCollection);
+      if (accuracy == 'true') {
+        this.collection[this.collection.indexOf(selectedWord)].accuracy = true;
+      } else {
+        this.collection[this.collection.indexOf(selectedWord)].accuracy = false;
+      }
+      this.nextWord(this.collection.indexOf(selectedWord) + 1);
     }
-  }
-
-  inCorrectWord() {
-    if (this.collectionIndex > this.collectionWords.length - 2) {
-      this.currentWord["isCorrect"] = false;
-      this.collectionWords[this.collectionIndex]["isCorrect"] = false;
-      this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
-      this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
-      this.endTime = new Date().getTime();
-      console.log('End:', this.endTime);
-      this.elapsedTime = this.endTime - this.startTime;
-      console.log('Elapsed:', this.elapsedTime/1000);
-      this.db.collection('studying-words').doc('studying-words').collection('study-records').doc(`${new Date()}`).set({time: this.elapsedTime/1000, name: `${new Date()}`, records: this.collectionWords});
-      this.previousCollection = this.currentCollection;
-      this.stopGame();
-      this.studyFinished = true;
-    } else {
-      this.currentWord["isCorrect"] = false;
-      this.collectionWords[this.collectionIndex]["isCorrect"] = false;
-      this.sessionStorageService.set(`${this.currentCollection}`, this.collectionWords);
-      this.db.collection('studying-words').doc('studying-words').collection(`${this.currentCollection}`).doc(`${this.currentWord.name}`).set(this.currentWord);
-      this.collectionIndex += 1;
-      this.studyCollection(this.currentCollection);
-    }
-  }
-
-  stopGame() {
-    this.startTime = undefined;
-    this.endTime = undefined;
-    this.elapsedTime = undefined;
-    this.collectionIndex = 0;
-    this.currentCollection = '';
-    this.collectionWords = [];
-    this.studying = false;
-    this.studyFinished = false;
   }
 }

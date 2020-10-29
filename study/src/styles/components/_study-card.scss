@@ -1,0 +1,43 @@
+.study-card {
+    text-align: center;
+    padding: 2.5rem;
+    margin: 5rem auto;
+    width: 75%;
+    border-radius: 5rem;
+    border: 2px solid $bright;
+
+    & h3 {
+        line-height: 2;
+    }
+
+    & p {
+        font-size: 10rem;
+        text-align: center;
+    }
+
+    &-buttons {
+        padding: 5rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        & button {
+            padding: 2.5rem;
+            font-size: 7.5rem;
+            
+            &:focus {
+                border: none;
+                outline: none;
+            }
+
+            &:not(:last-child) {
+                margin-right: 5rem;
+            }
+            
+            &:hover {
+                background: none;
+            }
+        } 
+    }
+}

@@ -8,5 +8,5 @@ export interface Column {
     autoCompleteDisplay?: boolean,
     navigateOnClick?: boolean,
     navigationPath?: string[],
-    navigationPathKey?: string
+    navigationPathKey?: string[]
 }
