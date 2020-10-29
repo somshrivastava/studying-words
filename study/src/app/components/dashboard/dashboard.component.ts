@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
     this.resultsCudi = {
       create: false,
       update: false,
-      delete: false,
+      delete: true,
       import: false
     };
     this.resultsColumns = [

@@ -90,10 +90,10 @@ export class StudyComponent implements OnInit {
             }
           }
         )
-        this.dataService.createFirestoreDocumentWithID('results', `${this.dataService.getTimestamp().replaceAll('/', '&')}`, {collectionName: this.collectionName, correct: correctNumber, incorrect: incorrectNumber, timestamp: this.dataService.getTimestamp()});
+        this.dataService.createFirestoreDocumentWithID('results', `${this.dataService.getTimestamp().replace(new RegExp('/', 'g'), '&')}`, {collectionName: this.collectionName, correct: correctNumber, incorrect: incorrectNumber, timestamp: this.dataService.getTimestamp()});
         this.collection.forEach(
           word => {
-            this.dataService.createFirestoreDocument(`results/${this.dataService.getTimestamp().replaceAll('/', '&')}/resultsData`, word)
+            this.dataService.createFirestoreDocument(`results/${this.dataService.getTimestamp().replace(new RegExp('/', 'g'), '&')}/resultsData`, word)
           }
         )
       }, 5000);
