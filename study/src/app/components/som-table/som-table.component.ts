@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { CUDI } from './../../models/cudi.model';
+import { CUDDI } from '../../models/cuddi.model';
 import { Column } from './../../models/column.model';
 import { DataService } from './../../services/data.service';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
@@ -11,10 +11,11 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 })
 
 export class SomTableComponent implements OnInit {
+  @Input() tableLength: string;
   @Input() title: string;
   @Input() database: string;
   @Input() columns: Column[];
-  @Input() cudi: CUDI;
+  @Input() cuddi: CUDDI;
   @ViewChild('csvReader') csvReader: any;
   data: any[] = [];
   newData: {} = {};
@@ -90,7 +91,7 @@ export class SomTableComponent implements OnInit {
   }
 
   updatingTableData(document) {
-    if (this.cudi.update == true) {
+    if (this.cuddi.update == true) {
       document.isEdit = true;
     }
   }
@@ -104,6 +105,14 @@ export class SomTableComponent implements OnInit {
 
   deleteTableData(document) {
     this.dataService.deleteFirestoreDocument(`${this.database}`, document.documentID)
+  }
+
+  deleteAll() {
+    this.data.forEach(
+      row => {
+        this.deleteTableData(row);
+      }
+    )
   }
 
   navigateUser(column, row) {

@@ -1,7 +1,7 @@
 import { DataService } from './../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Column } from '../../models/column.model';
-import { CUDI } from '../../models/cudi.model';
+import { CUDDI } from '../../models/cuddi.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -17,21 +17,21 @@ export class DashboardComponent implements OnInit {
   collections: any[] = [];
   collectionsTitle: string = 'Select A Collection Of Words To Modify Or View';
   collectionsDatabase: string = 'collections';
-  collectionsCudi: CUDI;
+  collectionsCuddi: CUDDI;
   collectionsColumns: Column[];
-  collectionCudi: CUDI;
+  collectionCuddi: CUDDI;
   collectionColumns: Column[];
   studyTitle: string = 'Select A Collection Of Words To Study';
   studyDatabase: string = 'collections';
-  studyCudi: CUDI;
+  studyCuddi: CUDDI;
   studyColumns: Column[];
   results: any[] = [];
   resultsTitle: string = 'Select A Past Study Result To Review'
   resultsDatabase: string = 'results';
   resultsColumns: Column[];
-  resultsCudi: CUDI;
+  resultsCuddi: CUDDI;
   resultColumns: Column[];
-  resultCudi: CUDI;
+  resultCuddi: CUDDI;
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -78,37 +78,41 @@ export class DashboardComponent implements OnInit {
           )
         }
       )
-      this.collectionsCudi = {
-      create: true,
-      update: true,
-      delete: true,
-      import: false
+      this.collectionsCuddi = {
+        create: true,
+        update: true,
+        delete: true,
+        deleteAll: true,
+        import: false
     };
     this.collectionsColumns = [
       {name: 'Name', key: 'name', type: 'text', edit: false, navigateOnClick: true, navigationPath: ['dashboard'], navigationPathKey: ['name']}
     ];
-    this.collectionCudi = {
+    this.collectionCuddi = {
       create: true,
       update: true,
       delete: true,
+      deleteAll: true,
       import: true
     };
     this.collectionColumns = [
       {name: 'Name', key: 'name', type: 'text', edit: false}
     ]
-    this.studyCudi = {
+    this.studyCuddi = {
       create: false,
       update: false,
       delete: false,
+      deleteAll: false,
       import: false
     };
     this.studyColumns = [
       {name: 'Name', key: 'name', type: 'text', edit: false, navigateOnClick: true, navigationPath: ['dashboard', 'study'], navigationPathKey: ['name']}
     ];
-    this.resultsCudi = {
+    this.resultsCuddi = {
       create: false,
       update: false,
       delete: true,
+      deleteAll: true,
       import: false
     };
     this.resultsColumns = [
@@ -117,10 +121,11 @@ export class DashboardComponent implements OnInit {
       {name: 'Correct', key: 'correct', type: 'number', edit: false},
       {name: 'Incorrect', key: 'incorrect', type: 'number', edit: false}
     ];
-    this.resultCudi = {
+    this.resultCuddi = {
       create: false,
       update: false,
       delete: false,
+      deleteAll: false,
       import: false
     };
     this.resultColumns = [

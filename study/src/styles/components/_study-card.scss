@@ -1,10 +1,17 @@
 .study-card {
+    position: relative;
     text-align: center;
     padding: 2.5rem;
     margin: 5rem auto;
     width: 75%;
     border-radius: 5rem;
     border: 2px solid $bright;
+
+    & .number {
+        position: absolute;
+        top: 2.5rem;
+        left: 2.5rem;
+    }
 
     & h3 {
         line-height: 2;

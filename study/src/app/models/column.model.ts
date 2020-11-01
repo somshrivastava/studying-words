@@ -3,7 +3,7 @@ export interface Column {
     key: string,
     type: string,
     edit: boolean,
-    options? : any,
+    options?: any,
     optionKey?: string,
     autoCompleteDisplay?: boolean,
     navigateOnClick?: boolean,

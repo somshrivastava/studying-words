@@ -90,6 +90,6 @@ export class DataService {
   }
 
   getTimestamp() {
-    return `${new Date().getMonth()}/${new Date().getDate()}/${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}`;
+    return `${new Date().getMonth() + 1}/${new Date().getDate()}/${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}`;
   }
 }
