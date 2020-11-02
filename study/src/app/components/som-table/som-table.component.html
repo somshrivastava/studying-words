@@ -1,22 +1,26 @@
+<h1 *ngIf="tableLength != undefined" class="table-title">{{data.length}} {{tableLength}}</h1>
 <h1 class="table-title">{{title}}</h1>
-<div *ngIf="cudi.import" class="file-import">
-    <div class="custom-file">
+<div class="extras">
+    <div *ngIf="cuddi.import" class="custom-file">
         <input (change)="selectedFileName = $event.target.files[0].name;" #csvReader accept=".csv" type="file" class="custom-file-input" id="customFile">
         <label class="custom-file-label" for="customFile">{{selectedFileName}}</label>
     </div>
-    <button (click)="importCSVData()" class="file-import-button">Import</button>
+    <div class="buttons">
+        <button *ngIf="cuddi.import" (click)="importCSVData()">Import</button>
+        <button (click)="deleteAll()" *ngIf="cuddi.deleteAll">Delete All</button>    
+    </div>
 </div>
 <div class="table-responsive">
     <table class="table">
         <thead>
             <th>
-                <i *ngIf="cudi.create && !adding" (click)="adding = true" class="text-light fa fa-plus pointer"></i>
-                <i *ngIf="cudi.create && adding" (click)="adding = false" class="text-danger fa fa-times pointer"></i>
+                <i *ngIf="cuddi.create && !adding" (click)="adding = true" class="text-light fa fa-plus pointer"></i>
+                <i *ngIf="cuddi.create && adding" (click)="adding = false" class="text-danger fa fa-times pointer"></i>
             </th>
             <th *ngFor="let column of columns"> {{column.name}} </th>
         </thead>
         <tbody>
-            <tr *ngIf="adding && cudi.create">
+            <tr *ngIf="adding && cuddi.create">
                 <td (click)="createTableData()"><i class="text-success fa fa-check pointer"></i></td>
                 <td *ngFor="let column of columns">
                     <input [(ngModel)]="newData[column.key]" *ngIf="column.type == 'text'" type="text" placeholder="{{column.name}}">                   
@@ -42,8 +46,8 @@
                 </td>
             </tr>
             <tr class="pointer" (dblclick)="updatingTableData(row)" *ngFor="let row of data">
-                <td *ngIf="!row.isEdit" (click)="deleteTableData(row)"><i *ngIf="cudi.delete" class="text-danger fa fa-trash pointer"></i></td>
-                <td *ngIf="row.isEdit" (click)="updateTableData(row)"><i *ngIf="cudi.update" class="text-success fa fa-check pointer"></i></td>
+                <td *ngIf="!row.isEdit" (click)="deleteTableData(row)"><i *ngIf="cuddi.delete" class="text-danger fa fa-trash pointer"></i></td>
+                <td *ngIf="row.isEdit" (click)="updateTableData(row)"><i *ngIf="cuddi.update" class="text-success fa fa-check pointer"></i></td>
                 <td (click)="navigateUser(column, row)" *ngFor="let column of columns"> 
                     <span *ngIf="!row.isEdit || !column.edit"> {{row[column.key]}} </span>
                     <div *ngIf="row.isEdit" class="isEdit">

@@ -1,4 +1,5 @@
 <div *ngIf="!studyFinished" class="study-card">
+    <h2 class="number">{{collection.indexOf(selectedWord) + 1}}</h2>
     <p>{{selectedWord.name}}</p>
     <div class="study-card-buttons">
         <button (click)="studyWord('true', selectedWord)" class="text-success border-success">Correct</button>
