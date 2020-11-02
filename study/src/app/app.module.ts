@@ -1,7 +1,7 @@
 import { DataService } from './services/data.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
-import { environment } from './../environments/environment.staging';
+import { environment } from './../environments/environment.prod';
 import { AngularFireModule } from '@angular/fire';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
