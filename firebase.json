@@ -1,0 +1,15 @@
+{
+  "hosting": [
+    {
+      "site": "studying-words",
+      "public": "dist/study",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
