@@ -1,4 +1,4 @@
-# Studying Words 📚
+# FlashcardStudying 📚
 
 ### Live Demo
 
